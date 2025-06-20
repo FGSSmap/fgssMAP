@@ -12,7 +12,7 @@
 #japan-map svg {
   display:flex;
   justify-content:center;
-  Align-items:center;
+  align-items:center;
   width:700px;
 height:630px;
   margin:20px 70px 20px 160px;
