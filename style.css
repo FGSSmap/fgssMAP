@@ -1,1 +1,43 @@
+.mainmap{display:flex;
+  justify-content:center;
+         Align-items:center;}
 
+#yamaguchimap,
+#jpmap,
+#worldmap{width:200px;
+height:50px;
+font-size:20px;
+border-radius:20px;
+cursor:pointer;
+transition:transform 0.2s ease;}
+
+.map-area{width:80vw;
+margin:20px auto;
+border-radius: 10px;
+overflow:hidden;}
+.geolonia-svg-map
+{
+  width: 100%;
+}
+#japan-map svg {
+  display:flex;
+  justify-content:center;
+  Align-items:center;
+  width:700px;
+height:630px;
+  margin:20px 70px 20px 160px;
+  }
+.geolonia-svg-map  .prefecture{fill:#f7f7f7;
+  stroke:#666666;
+  cursor:pointer;
+}
+
+#maprange {
+  width: 1000px;
+  height: 450px;
+  margin: 30px auto;
+  border: 2px solid gray;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  padding: 20px;
+}
