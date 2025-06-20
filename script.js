@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-fetch("svg/japan-map.svg")
+fetch("japan-map.svg")
   .then(res => res.text())
   .then(svg => {
     document.getElementById("japan-map").innerHTML = svg;
