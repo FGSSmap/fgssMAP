@@ -32,3 +32,8 @@ g.prefectures path {
   background-color: #f9f9f9;
   padding: 20px;
 }
+
+.geolonia-svg-map  .prefecture{fill:#f7f7f7;
+  stroke:#666666;
+  cursor:pointer;
+}
