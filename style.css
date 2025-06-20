@@ -21,3 +21,12 @@ height:630px;
   stroke:#666666;
   cursor:pointer;
 }
+#maprange {
+  width: 1000px;
+  height: 450px;
+  margin: 30px auto;
+  border: 2px solid gray;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  padding: 20px;
+}
