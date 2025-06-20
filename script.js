@@ -40,3 +40,46 @@ document.getElementById("yamaguchibutton").addEventListener("click",function(){d
 
 document.getElementById("jpbutton").addEventListener("click",function(){document.getElementById("maprange").style.display="none";
                                                                        document.getElementById("japan-map").style.display="block";});
+
+let mapLinks = {};
+ fetch("map-links.json")
+.then(res => res.json())
+.then(data => {mapLinks = data;
+})
+.catch(err => { condole.error("リンク情報読み込み失敗",err);
+              });
+const prefs= document.querySelectorAll('.geolonia-svg-map .prefecture');
+prefs.forEach(pref => {
+  pref.addEventListener('mouseover', event => {
+    event.currrentTarget.style.fill = "#ffaaaa";
+  });
+ pref.addEventListener('mouseleave',event => {
+   event.currentTarget.style.fill = "";
+ });
+  pref.addEventListener('click',event => {
+    const code = event.currentTarget.dataset.code;
+    showPrefectureMap(code);
+  });
+});
+
+function showPrefectureMap(code){
+  const url = mapLinks[code];
+  const maprange = document.getElementById("maprange");
+  const japan-map = document.getElementById("japan-map");
+
+  maprange.style.display="block";
+  japan-map.style.display="none";
+
+  if(!url){
+    maprange.innerHTML "<p>この都道府県の地図はまだ準備中です。</p>";
+    return;
+    }
+  maprange.innerHTML = `
+  <iframe src="${url}"
+     width="100%"
+     height="450"
+     style="border:0;"
+     allowfullscreen=""
+     loading="lazy"
+     referrerpolicy="mo-referrer-when-downgrade"></iframe>`;
+}
