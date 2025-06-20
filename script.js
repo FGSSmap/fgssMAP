@@ -35,3 +35,5 @@ fetch("japan-map.svg")
   })
   .catch(err => console.error("SVG読み込み失敗", err));
 
+document.getElementById("yamaguchibutton").addEventListener("click",function(){document.getElementById("maprange").style.display="block";
+                                                                              document.getElementById("japan-map").style.display="none";});
