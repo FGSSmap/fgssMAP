@@ -28,81 +28,39 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-fetch("japan-map.svg")
-  .then(res => res.text())
-  .then(svg => {
-    document.getElementById("japan-map").innerHTML = svg;
-  })
-  .catch(err => console.error("SVG読み込み失敗", err));
-
-document.getElementById("yamaguchibutton").addEventListener("click",function(){document.getElementById("maprange").style.display="block";
-                                                                              document.getElementById("japan-map").style.display="none";});
-
-document.getElementById("jpbutton").addEventListener("click",function(){document.getElementById("maprange").style.display="none";
-                                                                       document.getElementById("japan-map").style.display="block";});
-
-async function init() {
-  const map = "./japan-map.svg";
-  const container = document.querySelector('#japan-map');
-  const maprange = document.getElementById("maprange");
-
-  // 地図読み込み
-  const res = await fetch(map);
-  if (!res.ok) {
-    console.error("SVG地図の読み込み失敗");
-    return;
-  }
-
-  const svg = await res.text();
-  container.innerHTML = svg;
-
-  // 地図リンクの読み込み
-  let mapLinks = {};
-  try {
-    const mapRes = await fetch("map-links.json");
-    mapLinks = await mapRes.json();
-  } catch (err) {
-    console.error("地図リンクの読み込み失敗", err);
-  }
-
-  // イベント設定
-  const prefs = document.querySelectorAll('.geolonia-svg-map .prefecture');
-  prefs.forEach(pref => {
-    pref.addEventListener('mouseover', e => {
-      e.currentTarget.style.fill = "#ff0000";
-    });
-
-    pref.addEventListener('mouseleave', e => {
-      e.currentTarget.style.fill = "";
-    });
-
-    pref.addEventListener('click', e => {
-      const code = e.currentTarget.dataset.code;
+const prefs = document.querySelectorAll('.geolonia-svg-map .prefecture');
+prefs.forEach((pref)=>{
+pref.addEventListener('mouseover',(event)=>{event.currentTarget.style.fill = "#ffaaaa";});
+pref.addEventListener('mouseleave',(event)=>{event.currentTarget.style.fill = "";});
+pref.addEventListener('click', (event) => {
+      const code = event.currentTarget.dataset.code;
       showPrefectureMap(code);
     });
   });
 
-  function showPrefectureMap(code) {
-    const url = mapLinks[code];
-    container.style.display = "none";
-    maprange.style.display = "block";
-
-    if (!url) {
-      maprange.innerHTML = "<p>この都道府県の地図はまだ準備中です。</p>";
-      return;
-    }
-
-    maprange.innerHTML = `
-      <iframe src="${url}"
-        width="100%"
-        height="450"
-        style="border:0;"
-        allowfullscreen=""
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"></iframe>
-    `;
+function showPrefectureMap(code) {
+ const mapUrls = {
+　   
+    "35": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d844212.6013676944!2d131.63343944999994!3d34.256058299999985!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3544c719765a8ffd%3A0x490cbcc25354e270!2z5bGx5Y-j55yM!5e0!3m2!1sja!2sjp!4v1750041306016!5m2!1sja!2sjp",
+    
+    // 他の都道府県コードを追加可能
+  };
+ 
+  const url = mapUrls[code];
+  if (!url) {
+    document.getElementById("maprange").innerHTML = "<p>この都道府県の地図はまだ準備中です。</p>";
+    document.getElementById("maprange").style.display="block";
+    document.getElementById("japan-map").style.display="none";
+    return;
   }
+  document.getElementById("maprange").style.display = "block";
+  document.getElementById("japan-map").style.display="none";
+  
+   document.getElementById("maprange").innerHTML = `<iframe src="${url}"
+  width="100%"
+  height="450"
+  style="border:0;"
+  allowfullscreen""
+  loading="lazy"
+  referrerpolicy="no-referrer-when-downgrade"></iframe>`;
 }
-
-// 実行
-init();
