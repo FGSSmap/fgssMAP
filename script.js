@@ -46,12 +46,12 @@ let mapLinks = {};
 .then(res => res.json())
 .then(data => {mapLinks = data;
 })
-.catch(err => { condole.error("リンク情報読み込み失敗",err);
+.catch(err => { console.error("リンク情報読み込み失敗",err);
               });
 const prefs= document.querySelectorAll('.geolonia-svg-map .prefecture');
 prefs.forEach(pref => {
   pref.addEventListener('mouseover', event => {
-    event.currrentTarget.style.fill = "#ffaaaa";
+    event.currentTarget.style.fill = "#ffaaaa";
   });
  pref.addEventListener('mouseleave',event => {
    event.currentTarget.style.fill = "";
@@ -65,13 +65,13 @@ prefs.forEach(pref => {
 function showPrefectureMap(code){
   const url = mapLinks[code];
   const maprange = document.getElementById("maprange");
-  const japan-map = document.getElementById("japan-map");
+  const japanMap = document.getElementById("japan-map");
 
   maprange.style.display="block";
-  japan-map.style.display="none";
+  japanMap.style.display="none";
 
   if(!url){
-    maprange.innerHTML "<p>この都道府県の地図はまだ準備中です。</p>";
+    maprange.innerHTML= "<p>この都道府県の地図はまだ準備中です。</p>";
     return;
     }
   maprange.innerHTML = `
@@ -81,5 +81,5 @@ function showPrefectureMap(code){
      style="border:0;"
      allowfullscreen=""
      loading="lazy"
-     referrerpolicy="mo-referrer-when-downgrade"></iframe>`;
+     referrerpolicy="no-referrer-when-downgrade"></iframe>`;
 }
