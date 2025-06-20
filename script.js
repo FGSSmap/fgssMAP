@@ -37,3 +37,6 @@ fetch("japan-map.svg")
 
 document.getElementById("yamaguchibutton").addEventListener("click",function(){document.getElementById("maprange").style.display="block";
                                                                               document.getElementById("japan-map").style.display="none";});
+
+document.getElementById("jpbutton").addEventListener("click",function(){document.getElementById("maprange").sty;le.display="none";
+                                                                       document.getElementById("japan-map").style.display="block";});
