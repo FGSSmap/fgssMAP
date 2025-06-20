@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <title>ボタンテスト</title>
@@ -11,4 +9,4 @@
 
   <script src="script.js"></script>
 </body>
-</html>
+
