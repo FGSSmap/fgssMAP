@@ -27,3 +27,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+fetch("svg/japan-map.svg")
+  .then(res => res.text())
+  .then(svg => {
+    document.getElementById("japan-map").innerHTML = svg;
+  })
+  .catch(err => console.error("SVG読み込み失敗", err));
+
