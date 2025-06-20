@@ -17,10 +17,12 @@
 height:630px;
   margin:20px 70px 20px 160px;
   }
-.geolonia-svg-map  .prefecture{fill:#f7f7f7;
-  stroke:#666666;
-  cursor:pointer;
+g.prefectures path {
+  fill: #f7f7f7;
+  stroke: #666666;
+  cursor: pointer;
 }
+
 #maprange {
   width: 1000px;
   height: 450px;
