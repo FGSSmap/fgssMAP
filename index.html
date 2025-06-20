@@ -3,17 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <title>FGSS Map</title>
-  
-  <!-- ✅ CSSをここに入れる -->
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <!-- あなたのHTMLここに続く（地図ボタンやSVGなど） -->
+  <div class="map-buttons">
+    <button id="yamaguchimap">山口</button>
+    <button id="jpmap">日本</button>
+    <button id="sekaimap">世界</button>
+  </div>
 
+  <div id="maprange">
+    <!-- ここにGoogle MapのiframeがJSで挿入される -->
+  </div>
 
-  
-  <!-- ✅ JSはbodyの一番最後に入れる -->
+  <div id="japanmap-container">
+    <!-- SVG地図をJSで読み込み -->
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
