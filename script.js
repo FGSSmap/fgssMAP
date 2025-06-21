@@ -28,24 +28,25 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-document.getElementById("jpbutton").addEventlistner("click", function(){document.getElmentById("maprange").style.display="none";
-                                                                       document.getElementById("japan-map").style.display="block";
-                                                                       const japanMapDiv document.getElementById("japan-map");
-                                                                       japanMapDiv.style.display = "block";
-                                                                      
-                                      if (!japanMapDiv.innerHTML.trim()){
-                                        fetch("japan-map.svg")
-                                        .then(res => res.text())
-                                        .then(vg => {
-                                                      japanMapDiv.innerHTML = svg;
-                                        })
-                                          .catch(err => {console.error("SVG読み込み失敗", err);
-                                                         japanMapDiv.innerHTML = "<p>地図の読み込み失敗</p>";  
-                                          });
-                                          }
-                                         });
+document.getElementById("jpbutton").addEventListener("click", function() {
+  document.getElementById("maprange").style.display = "none";
+  const japanMapDiv = document.getElementById("japan-map");
+  japanMapDiv.style.display = "block";
 
-let mapLinks = {}; 
+  if (!japanMapDiv.innerHTML.trim()) {
+    fetch("japan-map.svg")
+      .then(res => res.text())
+      .then(svg => {
+        japanMapDiv.innerHTML = svg;
+      })
+      .catch(err => {
+        console.error("SVG読み込み失敗", err);
+        japanMapDiv.innerHTML = "<p>地図の読み込み失敗</p>";
+      });
+  }
+});
+
+let mapLinks = {};
 
 fetch("map-links.json")
   .then(res => res.json())
@@ -58,7 +59,7 @@ fetch("map-links.json")
       pref.addEventListener('mouseover', event => {
         event.currentTarget.style.fill = "#ffaaaa";
       });
-      
+
       pref.addEventListener('mouseleave', event => {
         event.currentTarget.style.fill = "";
       });
@@ -96,6 +97,3 @@ function showPrefectureMap(code) {
       referrerpolicy="no-referrer-when-downgrade">
     </iframe>`;
 }
-
-
-
