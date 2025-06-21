@@ -35,7 +35,7 @@ document.getElementById("jpbutton").addEventListener("click", function() {
   japanMapDiv.style.display = "block";
 
   if (!japanMapDiv.innerHTML.trim()) {
-    fetch("japan-map.svg")
+    fetch("https://fgssmap.github.io/fgssMAP/japan-map.svg")
       .then(res => res.text())
       .then(svg => {
         japanMapDiv.innerHTML = svg;
@@ -65,7 +65,7 @@ document.getElementById("jpbutton").addEventListener("click", function() {
 });
 
 let mapLinks = {};
-fetch("map-links.json")
+fetch("https://fgssmap.github.io/fgssMAP/map-links.json")
   .then(res => res.json())
   .then(data => {
     mapLinks = data;
