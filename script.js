@@ -64,6 +64,13 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("yamaguchibutton").addEventListener("click", function () {
     document.getElementById("maprange").style.display = "block";
     document.getElementById("japan-map").style.display = "none";
+    getElementById("maprange").innerHTML = `<iframe src="${yamaguchicityMapUrl}"
+                                             width="100%"
+                                             height="450"
+                                             style="border:0;"
+                                             allowfullscreen=""
+                                             loading="lazy"
+                                             referrerpolicy="no-referrer-when-downgrade"></iframe>`;
   });
 });
 
