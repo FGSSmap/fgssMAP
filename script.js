@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+
 document.getElementById("jpbutton").addEventListener("click", function() {
   document.getElementById("maprange").style.display = "none";
   const japanMapDiv = document.getElementById("japan-map");
@@ -38,6 +39,23 @@ document.getElementById("jpbutton").addEventListener("click", function() {
       .then(res => res.text())
       .then(svg => {
         japanMapDiv.innerHTML = svg;
+
+        // ▼ SVG読み込み後にイベント設定
+        const prefs = document.querySelectorAll('.geolonia-svg-map .prefecture');
+        prefs.forEach(pref => {
+          pref.addEventListener('mouseover', event => {
+            event.currentTarget.style.fill = "#ffaaaa";
+          });
+
+          pref.addEventListener('mouseleave', event => {
+            event.currentTarget.style.fill = "";
+          });
+
+          pref.addEventListener('click', event => {
+            const code = event.currentTarget.dataset.code;
+            showPrefectureMap(code);
+          });
+        });
       })
       .catch(err => {
         console.error("SVG読み込み失敗", err);
@@ -47,28 +65,10 @@ document.getElementById("jpbutton").addEventListener("click", function() {
 });
 
 let mapLinks = {};
-
 fetch("map-links.json")
   .then(res => res.json())
   .then(data => {
     mapLinks = data;
-
-    const prefs = document.querySelectorAll('.geolonia-svg-map .prefecture');
-
-    prefs.forEach(pref => {
-      pref.addEventListener('mouseover', event => {
-        event.currentTarget.style.fill = "#ffaaaa";
-      });
-
-      pref.addEventListener('mouseleave', event => {
-        event.currentTarget.style.fill = "";
-      });
-
-      pref.addEventListener('click', event => {
-        const code = event.currentTarget.dataset.code;
-        showPrefectureMap(code);
-      });
-    });
   })
   .catch(err => {
     console.error("地図リンク読み込み失敗", err);
