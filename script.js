@@ -35,7 +35,7 @@ document.getElementById("jpbutton").addEventListener("click", function() {
   japanMapDiv.style.display = "block";}
 
 document.getElementById("yamaguchibutton").addEventListener("click",function(){getElementById("maprange").style.display="block";
-                                                                              getelementById("japan-map").style.display="none"l})                                                     
+                                                                              getElementById("japan-map").style.display="none";})                                                     
 
   if (!japanMapDiv.innerHTML.trim()) {
     fetch("https://fgssmap.github.io/fgssMAP/japan-map.svg")
