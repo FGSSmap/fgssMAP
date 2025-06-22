@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", function () {
       if (selected !== this) {
         selected.style.transform = "scaleY(1)";
-        this.style.transformOrigin = "bottum center";
+        this.style.transformOrigin = "bottom center";
         this.style.transform = "scaleY(1.3)";
         selected = this;
       }
@@ -33,6 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("maprange").style.display = "none";
     const japanMapDiv = document.getElementById("japan-map");
     japanMapDiv.style.display = "block";
+
+    history.pushState({ view: "japan" }, "", "?view=japan");
 
     if (!japanMapDiv.innerHTML.trim()) {
       fetch("https://fgssmap.github.io/fgssMAP/japan-map.svg")
@@ -73,7 +75,26 @@ document.addEventListener("DOMContentLoaded", () => {
                                              allowfullscreen=""
                                              loading="lazy"
                                              referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+
+    history.pushState({ view: "yamaguchi" }, "", "?view=yamaguchi");
   });
+
+  // 初期状態として登録
+  history.replaceState({ view: "yamaguchi" }, "", "?view=yamaguchi");
+});
+
+// 戻る操作対応
+window.addEventListener("popstate", (event) => {
+  const state = event.state;
+  if (!state) return;
+
+  if (state.view === "yamaguchi") {
+    document.getElementById("yamaguchibutton").click();
+  } else if (state.view === "japan") {
+    document.getElementById("jpbutton").click();
+  } else if (state.code) {
+    showPrefectureMap(state.code);
+  }
 });
 
 let mapLinks = {};
@@ -98,6 +119,8 @@ function showPrefectureMap(code) {
     maprange.innerHTML = "<p>この都道府県の地図はまだ準備中です。</p>";
     return;
   }
+
+  history.pushState({ code }, "", `?pref=${code}`);
 
   maprange.innerHTML = `
     <iframe src="${url}"
