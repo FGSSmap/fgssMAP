@@ -10,18 +10,19 @@
              justify-content:center;
              Align-items:center;}
 #japan-map svg {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  width:700px;
-  height:630px;
-  margin:20px 70px 20px 160px;
+  width: 1000px;
+  height: 450px;
+  margin: 0 auto 30px auto;
+  border: 2px solid gray;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  padding: 20px;
   }
 
 #maprange {
   width: 1000px;
   height: 450px;
-  margin: 30px auto;
+  margin: 0 auto 30px auto;
   border: 2px solid gray;
   border-radius: 10px;
   background-color: #f9f9f9;
