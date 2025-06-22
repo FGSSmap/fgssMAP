@@ -27,14 +27,13 @@
 #japan-map svg {        
   width: 1000px;
   height: 450px;
-  margin: 0 auto 30px auto;
   border: 2px solid gray;
   border-radius: 10px;
   background-color: #f9f9f9;
-  padding: 20px;
 }
 
-#japan-map{text-align: center;}
+#japan-map{display:flex;
+           text-align: center;}
 
 #maprange {
   display:flex;
