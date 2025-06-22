@@ -19,13 +19,15 @@
               border-radius:20px;
               cursor:pointer;
               transition:transform 0.2s ease;}
+
 .map-buttons{display:flex;
              justify-content:center;
              Align-items:center;}
+
 #japan-map svg {
   width: 1000px;
   height: 450px;
-  margin: 0 auto 30px auto;
+  margin: 0 auto 30px 50px;
   border: 2px solid gray;
   border-radius: 10px;
   background-color: #f9f9f9;
