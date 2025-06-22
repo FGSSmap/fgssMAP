@@ -24,8 +24,7 @@
              justify-content:center;
              Align-items:center;}
 
-#japan-map svg {
-           
+#japan-map svg {        
   width: 1000px;
   height: 450px;
   margin: 0 auto 30px auto;
@@ -34,6 +33,8 @@
   background-color: #f9f9f9;
   padding: 20px;
 }
+
+#japan-map{text-align: center;}
 
 #maprange {
   display:flex;
