@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", function () {
       if (selected !== this) {
         selected.style.transform = "scaleY(1)";
-        this.style.transormOrigin = "bottum center";
+        this.style.transformOrigin = "bottum center";
         this.style.transform = "scaleY(1.3)";
         selected = this;
       }
