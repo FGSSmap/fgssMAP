@@ -1,3 +1,16 @@
+.header{padding: 10px;}
+
+.logo-title{display:flex;
+           flex-direction:column;
+           alignitems:center;}
+
+.logo{width:60px;
+      height:60px;}
+
+.title{font-size:20px;
+      margin-tops:8px;
+      text-align:center;}
+
 #yamaguchibutton,
 #jpbutton,
 #worldbutton{width:200px;
