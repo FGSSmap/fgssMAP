@@ -133,3 +133,38 @@ function showPrefectureMap(code) {
       referrerpolicy="no-referrer-when-downgrade">
     </iframe>`;
 }
+
+document.getElementById("worldbutton").addEventListener("click", function () {
+  document.getElementById("maprange").style.display = "none";
+  document.getElementById("japan-map").style.display = "none";
+  const worldMapDiv = document.getElementById("world-map");
+  worldMapDiv.style.display = "block";
+
+  if (!worldMapDiv.innerHTML.trim()) {
+    fetch("map.svg") 
+      .then(res => res.text())
+      .then(svg => {
+        worldMapDiv.innerHTML = svg;
+        
+        document.querySelectorAll('#world-map svg path').forEach(country => {
+          country.addEventListener("mouseover", () => {
+            country.style.fill = "#ffaaaa";
+          });
+
+          country.addEventListener("mouseleave", () => {
+            country.style.fill = "";
+          });
+
+          country.addEventListener("click", () => {
+            const code = country.id; // 例: "JP" とか "US"
+            showCountryMap(code); 
+          });
+        });
+      })
+      .catch(err => {
+        console.error("世界地図の読み込み失敗", err);
+        worldMapDiv.innerHTML = "<p>世界地図の読み込み失敗</p>";
+      });
+  }
+});
+
