@@ -137,7 +137,7 @@ function showCountryMap(code) {
     document.getElementById("maprange").innerHTML = "<p>この国の地図はまだ準備中です。</p>";
     return;
   }
-  switchDisplay("world-map");  // 他全部非表示、maprangeを表示
+  switchDisplay("world-map"); 
   history.pushState({ country: code }, "", `?country=${code}`);
   document.getElementById("maprange").innerHTML = getIframeHTML(url);
 }
