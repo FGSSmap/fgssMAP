@@ -54,8 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
     switchDisplay("world");
     history.pushState({ view: "world" }, "", "?view=world");
     const worldMapDiv = document.getElementById("world-map");
-    document.getElementById("maprange").style.display="none";
-    document.getElementById("japan-map").style.display="none";
     
     if (!worldMapDiv.innerHTML.trim()) {
       fetch("map.svg")
