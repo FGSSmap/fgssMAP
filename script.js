@@ -19,6 +19,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // 山口
+  document.getElementById("yamaguchibutton").addEventListener("click", () => {
+    switchDisplay("yamaguchi");
+    document.getElementById("maprange").innerHTML = getIframeHTML(yamaguchicityMapUrl);
+    history.pushState({ view: "yamaguchi" }, "", "?view=yamaguchi");
+  });
+
+  // 日本
   document.getElementById("jpbutton").addEventListener("click", () => {
     switchDisplay("japan");
     history.pushState({ view: "japan" }, "", "?view=japan");
@@ -41,12 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  document.getElementById("yamaguchibutton").addEventListener("click", () => {
-    switchDisplay("yamaguchi");
-    document.getElementById("maprange").innerHTML = getIframeHTML(yamaguchicityMapUrl);
-    history.pushState({ view: "yamaguchi" }, "", "?view=yamaguchi");
-  });
-
+  // 世界
   document.getElementById("worldbutton").addEventListener("click", () => {
     switchDisplay("world");
     history.pushState({ view: "world" }, "", "?view=world");
@@ -69,11 +72,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 初期状態として履歴登録
+  // 初期状態履歴
   history.replaceState({ view: "yamaguchi" }, "", "?view=yamaguchi");
 });
 
-// 戻る操作対応
+// 履歴で戻る対応
 window.addEventListener("popstate", (event) => {
   const state = event.state;
   if (!state) return;
@@ -91,18 +94,19 @@ window.addEventListener("popstate", (event) => {
   }
 });
 
-// 共通関数
+// 表示切替
 function switchDisplay(target) {
   document.getElementById("maprange").style.display = target === "yamaguchi" ? "block" : "none";
   document.getElementById("japan-map").style.display = target === "japan" ? "block" : "none";
   document.getElementById("world-map").style.display = target === "world" ? "block" : "none";
 }
 
+// iframe用HTML作成
 function getIframeHTML(url) {
   return `<iframe src="${url}" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
 }
 
-// 日本地図用リンク
+// 日本地図リンク
 let mapLinks = {};
 fetch("https://fgssmap.github.io/fgssMAP/map-links.json")
   .then(res => res.json())
@@ -120,7 +124,7 @@ function showPrefectureMap(code) {
   document.getElementById("maprange").innerHTML = getIframeHTML(url);
 }
 
-// 世界地図用リンク
+// 世界地図リンク
 let worldLinks = {};
 fetch("https://fgssmap.github.io/fgssMAP/map-links-world.json")
   .then(res => res.json())
@@ -133,9 +137,7 @@ function showCountryMap(code) {
     document.getElementById("maprange").innerHTML = "<p>この国の地図はまだ準備中です。</p>";
     return;
   }
-
-  switchDisplay("yamaguchi");
+  switchDisplay("yamaguchi");  // 他全部非表示、maprangeを表示
   history.pushState({ country: code }, "", `?country=${code}`);
   document.getElementById("maprange").innerHTML = getIframeHTML(url);
 }
-
