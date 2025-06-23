@@ -134,8 +134,6 @@ function showCountryMap(code) {
     return;
   }
 
-  document.getElementById("world-map").style.display = "none"; // ←⭐ 追加
-
   switchDisplay("yamaguchi");
   history.pushState({ country: code }, "", `?country=${code}`);
   document.getElementById("maprange").innerHTML = getIframeHTML(url);
