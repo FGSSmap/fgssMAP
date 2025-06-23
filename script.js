@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("jpbutton").addEventListener("click", function () {
     document.getElementById("maprange").style.display = "none";
+    document.getElementById("world-map").style.display="none";
     const japanMapDiv = document.getElementById("japan-map");
     japanMapDiv.style.display = "block";
 
