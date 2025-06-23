@@ -33,6 +33,20 @@
   background-color: #f9f9f9;
 }
 
+#world-map {
+  max-width: 1000px;
+  width: 100%;
+  height: 450px;
+  margin: 0 auto 30px auto;
+  border: 2px solid gray;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  padding: 20px;
+  display:flex;
+  text-align:center;
+}
+
+
 #japan-map{display:flex;
            text-align: center;}
 
