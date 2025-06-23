@@ -133,7 +133,11 @@ function showCountryMap(code) {
     document.getElementById("maprange").innerHTML = "<p>この国の地図はまだ準備中です。</p>";
     return;
   }
+
+  document.getElementById("world-map").style.display = "none"; // ←⭐ 追加
+
   switchDisplay("yamaguchi");
   history.pushState({ country: code }, "", `?country=${code}`);
   document.getElementById("maprange").innerHTML = getIframeHTML(url);
 }
+
