@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("jpbutton").addEventListener("click", () => {
     switchDisplay("japan");
     history.pushState({ view: "japan" }, "", "?view=japan");
+    document.getElementById("map-area").style.display="none";
     const japanMapDiv = document.getElementById("japan-map");
 
     if (!japanMapDiv.innerHTML.trim()) {
