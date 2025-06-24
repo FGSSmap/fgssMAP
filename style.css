@@ -8,7 +8,8 @@
        height:100%;
        display:flex;
        justify-content:center;
-       Align-items:center;}
+       Align-items:center;
+       color:yellow;}
 
 .logo-title{display:flex;
            flex-direction:column;
