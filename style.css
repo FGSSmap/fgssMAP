@@ -9,13 +9,13 @@
        display:flex;
        justify-content:center;
        align-items:center;
-       color:#f2b53d;
+       color:#red;
        background-color:;}
 
 .logo-title{display:flex;
            flex-direction:column;
            align-items:center;
-           background-color:#add8e6;
+           background-color:#f2b53d;
            boder-radius:20px;}
 
 .logo{width:60px;
