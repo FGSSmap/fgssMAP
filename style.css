@@ -6,7 +6,7 @@
 
 .logo-title{display:flex;
            flex-direction:column;
-           alignitems:center;}
+           align-items:center;}
 
 .logo{width:60px;
       height:60px;}
