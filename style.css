@@ -34,6 +34,10 @@
               cursor:pointer;
               transition:transform 0.2s ease;}
 
+#yamaguchibutton{color:yellow;}
+#jpbutton{color:blue;}
+#worldbutton{color:green;}
+
 .map-buttons{display:flex;
              justify-content:center;
              Align-items:center;}
