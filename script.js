@@ -53,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("worldbutton").addEventListener("click", () => {
     switchDisplay("world");
     history.pushState({ view: "world" }, "", "?view=world");
-      document.getElementById("map-area").style.display="none";
     const worldMapDiv = document.getElementById("world-map");
     
     if (!worldMapDiv.innerHTML.trim()) {
