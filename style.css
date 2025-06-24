@@ -9,8 +9,8 @@
        display:flex;
        justify-content:center;
        align-items:center;
-       color:yellow;
-       background-color:#add8e6;}
+       color:#add8e6;
+       background-color:;}
 
 .logo-title{display:flex;
            flex-direction:column;
