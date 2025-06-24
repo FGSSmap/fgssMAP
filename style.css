@@ -5,7 +5,10 @@
          Align-items:center;}
 
 .title1{width:50%;
-       height:100%}
+       height:100%
+       display:flex;
+       justify-content:center;
+       Align-items:center;}
 
 .logo-title{display:flex;
            flex-direction:column;
