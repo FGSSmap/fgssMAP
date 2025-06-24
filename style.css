@@ -15,7 +15,8 @@
 .logo-title{display:flex;
            flex-direction:column;
            align-items:center;
-           background-color:#add8e6;}
+           background-color:#add8e6;
+           boder-radius:20px;}
 
 .logo{width:60px;
       height:60px;}
