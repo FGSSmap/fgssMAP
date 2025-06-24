@@ -8,8 +8,9 @@
        height:100%;
        display:flex;
        justify-content:center;
-       Align-items:center;
-       color:yellow;}
+       align-items:center;
+       color:yellow;
+       background-color:blue;}
 
 .logo-title{display:flex;
            flex-direction:column;
