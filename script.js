@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  document.getElementstagName("h1")[0].style.fontSize="6vw";
+  document.getElementsTagName("h1")[0].style.fontSize="6vw";
 
   // 山口
   document.getElementById("yamaguchibutton").addEventListener("click", () => {
