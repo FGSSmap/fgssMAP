@@ -11,11 +11,6 @@
        align-items:center;
        color:#ff69b4;
        background-color:;
-        
-       background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
-       -webkit-background-clip: text;
-       -webkit-text-fill-color: transparent;
-       font-weight: bold;
 }
 
 .logo-title{display:flex;
