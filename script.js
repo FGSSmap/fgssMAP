@@ -152,34 +152,44 @@ function showCountryMap(code) {
   history.pushState({ country: code }, "", `?country=${code}`);
 }
 
-//下の機構
+// 下の機構：観光地データの読み込みと表示
 function loadSpots(areaCode) {
+  const spotContainer = document.getElementById("spot-list");
+  if (!spotContainer) return;
+
   fetch(`./data/spots/${areaCode}.json`)
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error("データが取得できませんでした");
+      return res.json();
+    })
     .then(data => {
-      const spotContainer = document.getElementById("spot-list");
       spotContainer.innerHTML = ""; // 初期化
 
       data.forEach(spot => {
         const div = document.createElement("div");
         div.className = "spot-box";
+
+        const imageTag = spot.image
+          ? `<img src="${spot.image}" alt="${spot.name}">`
+          : `<div class="no-image">画像なし</div>`;
+
         div.innerHTML = `
-          <img src="${spot.image}" alt="${spot.name}">
+          ${imageTag}
           <h3>${spot.name}</h3>
           <p>${spot.comment}</p>
         `;
         spotContainer.appendChild(div);
       });
     })
-    .catch(() => {
-      document.getElementById("spot-list").innerHTML = "<p>観光地情報の読み込み失敗</p>";
+    .catch((err) => {
+      console.error("読み込みエラー:", err);
+      spotContainer.innerHTML = "<p>観光地情報の読み込みに失敗しました。</p>";
     });
 }
 
+// 地図切り替え時に観光地リストも更新する
 function switchToArea(areaCode) {
-  // マップ切り替え（今の処理）
-  switchMapDisplay(areaCode);
-  
-  // 観光地表示
-  loadSpots(areaCode); // ここでJSON読んでHTML生成
+  switchMapDisplay(areaCode); // 地図表示切り替え処理（別に定義されてると仮定）
+  loadSpots(areaCode);        // 対応する観光地情報を表示
 }
+
