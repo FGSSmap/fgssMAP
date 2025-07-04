@@ -151,3 +151,27 @@ function showCountryMap(code) {
   document.getElementById("maprange").innerHTML = getIframeHTML(url);
   history.pushState({ country: code }, "", `?country=${code}`);
 }
+
+//下の機構
+function loadSpots(areaCode) {
+  fetch(`./data/spots/${areaCode}.json`)
+    .then(res => res.json())
+    .then(data => {
+      const spotContainer = document.getElementById("spot-list");
+      spotContainer.innerHTML = ""; // 初期化
+
+      data.forEach(spot => {
+        const div = document.createElement("div");
+        div.className = "spot-box";
+        div.innerHTML = `
+          <img src="${spot.image}" alt="${spot.name}">
+          <h3>${spot.name}</h3>
+          <p>${spot.comment}</p>
+        `;
+        spotContainer.appendChild(div);
+      });
+    })
+    .catch(() => {
+      document.getElementById("spot-list").innerHTML = "<p>観光地情報の読み込み失敗</p>";
+    });
+}
