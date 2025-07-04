@@ -175,3 +175,11 @@ function loadSpots(areaCode) {
       document.getElementById("spot-list").innerHTML = "<p>観光地情報の読み込み失敗</p>";
     });
 }
+
+function switchToArea(areaCode) {
+  // マップ切り替え（今の処理）
+  switchMapDisplay(areaCode);
+  
+  // 観光地表示
+  loadSpots(areaCode); // ここでJSON読んでHTML生成
+}
