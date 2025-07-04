@@ -50,28 +50,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 世界
-  document.getElementById("worldbutton").addEventListener("click", () => {
-    switchDisplay("world");
-    history.pushState({ view: "world" }, "", "?view=world");
-    const worldMapDiv = document.getElementById("world-map");
-    
-    if (!worldMapDiv.innerHTML.trim()) {
-      fetch("map.svg")
-        .then(res => res.text())
-        .then(svg => {
-          worldMapDiv.innerHTML = svg;
-          document.querySelectorAll('#world-map svg path').forEach(country => {
-            country.addEventListener("mouseover", () => country.style.fill = "#ffaaaa");
-            country.addEventListener("mouseleave", () => country.style.fill = "");
-            country.addEventListener("click", () => showCountryMap(country.id));
+ // 世界
+document.getElementById("worldbutton").addEventListener("click", () => {
+  switchDisplay("world");
+  history.pushState({ view: "world" }, "", "?view=world");
+  const worldMapDiv = document.getElementById("world-map");
+
+  if (!worldMapDiv.innerHTML.trim()) {
+    fetch("map.svg")
+      .then(res => res.text())
+      .then(svg => {
+        worldMapDiv.innerHTML = svg;
+
+        document.querySelectorAll('#world-map svg path').forEach(country => {
+          country.addEventListener("mouseover", () => country.style.fill = "#ffaaaa");
+          country.addEventListener("mouseleave", () => country.style.fill = "");
+          country.addEventListener("click", () => {
+            const code = country.getAttribute("cc")?.toLowerCase();
+            if (code) showCountryMap(code);
           });
-        })
-        .catch(() => {
-          worldMapDiv.innerHTML = "<p>世界地図の読み込み失敗</p>";
         });
-    }
-  });
+      })
+      .catch(() => {
+        worldMapDiv.innerHTML = "<p>世界地図の読み込み失敗</p>";
+      });
+  }
+});
+
 
   // 初期状態履歴
   history.replaceState({ view: "yamaguchi" }, "", "?view=yamaguchi");
