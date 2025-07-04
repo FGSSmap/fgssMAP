@@ -50,23 +50,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
- // 世界
+// 🌍 世界地図ボタンの処理
 document.getElementById("worldbutton").addEventListener("click", () => {
   switchDisplay("world");
   history.pushState({ view: "world" }, "", "?view=world");
   const worldMapDiv = document.getElementById("world-map");
 
   if (!worldMapDiv.innerHTML.trim()) {
-    fetch("map.svg")
+    fetch("https://fgssmap.github.io/fgssMAP/map.svg")
       .then(res => res.text())
       .then(svg => {
         worldMapDiv.innerHTML = svg;
 
-        document.querySelectorAll('#world-map svg path').forEach(country => {
-          country.addEventListener("mouseover", () => country.style.fill = "#ffaaaa");
-          country.addEventListener("mouseleave", () => country.style.fill = "");
-          country.addEventListener("click", () => {
-            const code = country.getAttribute("cc")?.toLowerCase();
+        // <g cc="xx"> に対応
+        document.querySelectorAll('#world-map svg g[cc]').forEach(group => {
+          group.addEventListener("mouseover", () => group.style.opacity = "0.7");
+          group.addEventListener("mouseleave", () => group.style.opacity = "1");
+          group.addEventListener("click", () => {
+            const code = group.getAttribute("cc")?.toLowerCase();
             if (code) showCountryMap(code);
           });
         });
@@ -130,7 +131,7 @@ function showPrefectureMap(code) {
   document.getElementById("maprange").innerHTML = getIframeHTML(url);
 }
 
-// 世界地図リンク
+// 🌍 世界リンクの読み込みと地図表示
 let worldLinks = {};
 fetch("https://fgssmap.github.io/fgssMAP/map-links-world.json")
   .then(res => res.json())
@@ -143,7 +144,8 @@ function showCountryMap(code) {
     document.getElementById("maprange").innerHTML = "<p>この国の地図はまだ準備中です。</p>";
     return;
   }
-  switchDisplay("yamaguchi"); 
-  history.pushState({ country: code }, "", `?country=${code}`);
+  // 🌍 地図切り替え
+  switchDisplay("yamaguchi");
   document.getElementById("maprange").innerHTML = getIframeHTML(url);
+  history.pushState({ country: code }, "", `?country=${code}`);
 }
