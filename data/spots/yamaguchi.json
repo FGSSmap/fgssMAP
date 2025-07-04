@@ -1,1 +1,12 @@
-
+[
+  {
+    "name": "秋吉台",
+    "image": "images/akiyoshidai.jpg",
+    "comment": "日本最大のカルスト台地"
+  },
+  {
+    "name": "瑠璃光寺五重塔",
+    "image": "images/rurikoji.jpg",
+    "comment": "国宝であり山口の象徴"
+  }
+]
