@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const yamaguchicityMapUrl =
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d422206.7648998558!2d131.5436647!3d34.2360294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x354495c54c9efd75%3A0x263156320e32adf7!2z5bGx5Y-j55yM5bGx5Y-j5biC!5e0!3m2!1sja!2sjp!4v1750313187750!5m2!1sja!2sjp";
+    "https://www.google.com/maps/d/u/1/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F";
 
   // 初期表示
   document.getElementById("maprange").innerHTML = getIframeHTML(yamaguchicityMapUrl);
