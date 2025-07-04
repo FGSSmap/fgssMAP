@@ -3,7 +3,11 @@
 .subtitle{display:flex;
          justify-content:center;
          align-items:center;
-         text-align: center;}
+         text-align: center;
+         font-gamily:"UoqMunThenKhung", sans-serif;
+         font-weight:400;
+         font-style:normal;
+         color:black;}
 
 .title1{width:6vw;
        height:5vh;
