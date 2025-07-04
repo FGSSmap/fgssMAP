@@ -152,12 +152,18 @@ function showCountryMap(code) {
   history.pushState({ country: code }, "", `?country=${code}`);
 }
 
-// 下の機構：観光地データの読み込みと表示
+// 観光地データの読み込みと表示（都道府県コードまたは国コードに対応）
 function loadSpots(areaCode) {
   const spotContainer = document.getElementById("spot-list");
   if (!spotContainer) return;
 
-  fetch(`./data/spots/${areaCode}.json`)
+  // areaCodeが都道府県（2桁の数字）か国コード（英字）かを判定
+  const isJapan = /^[0-9]{2}$/.test(areaCode);
+  const filePath = isJapan
+    ? `./data/spots/japan/${areaCode}.json`
+    : `./data/spots/world/${areaCode}.json`;
+
+  fetch(filePath)
     .then(res => {
       if (!res.ok) throw new Error("データが取得できませんでした");
       return res.json();
@@ -189,7 +195,8 @@ function loadSpots(areaCode) {
 
 // 地図切り替え時に観光地リストも更新する
 function switchToArea(areaCode) {
-  switchMapDisplay(areaCode); // 地図表示切り替え処理（別に定義されてると仮定）
-  loadSpots(areaCode);        // 対応する観光地情報を表示
+  switchMapDisplay(areaCode); // 地図表示切り替え処理
+  loadSpots(areaCode);        // 観光地JSON読み込み
 }
+
 
