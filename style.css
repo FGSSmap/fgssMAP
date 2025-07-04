@@ -43,11 +43,10 @@
               font-size:40px;
               border-radius:20px;
               cursor:pointer;
-              transition:transform 0.2s ease;}
-
-#yamaguchibutton{color:yellow;}
-#jpbutton{color:blue;}
-#worldbutton{color:green;}
+              transition:transform 0.2s ease;
+              font-family:"Hachi Maru Pop", sans-serif;
+              font-weight:400;
+              font-style:normal;}
 
 .map-buttons{display:flex;
              justify-content:center;
