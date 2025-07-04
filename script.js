@@ -66,6 +66,8 @@ document.getElementById("worldbutton").addEventListener("click", () => {
         document.querySelectorAll('#world-map svg g[cc]').forEach(group => {
           group.addEventListener("mouseover", () => group.style.opacity = "0.7");
           group.addEventListener("mouseleave", () => group.style.opacity = "1");
+          group.addEventListener("mouseover", () => group.style.fill = "#ffaaaa");
+          group.addEventListener("mouseleave", () => group.style.fill = "");
           group.addEventListener("click", () => {
             const code = group.getAttribute("cc")?.toLowerCase();
             if (code) showCountryMap(code);
