@@ -152,7 +152,8 @@ function showCountryMap(code) {
   history.pushState({ country: code }, "", `?country=${code}`);
 }
 
-fufunction loadSpots(areaCode){
+//下
+function loadSpots(areaCode){
   const spotContainer = document.getElementById("spot-list");
   if(!spotContainer) return;
 
