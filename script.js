@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
             pref.addEventListener("mouseover", () => pref.style.fill = "#ffaaaa");
             pref.addEventListener("mouseleave", () => pref.style.fill = "");
             pref.addEventListener("click", () => showPrefectureMap(pref.dataset.code));
+            loadSpots(pref.dataset.code);
           });
         })
         .catch(() => {
@@ -72,6 +73,13 @@ document.getElementById("worldbutton").addEventListener("click", () => {
             const code = group.getAttribute("cc")?.toLowerCase();
             if (code) showCountryMap(code);
           });
+          group.addEventListener("click",()=>{
+            const code=group.getAttribute("cc")?.toLowerCase();
+            if(code){
+              showCountryMap(code);
+              loadSpots(code);
+            }
+          })
         });
       })
       .catch(() => {
@@ -161,6 +169,8 @@ function loadSpots(areaCode){
   const filePath = isJapan 
   ?`./data/spots/japan/${areaCode}.json`
   :`./data/spots/world/${areaCode}.json`;
+
+  
 
   fetch(filePath)
   .then(res=>{
