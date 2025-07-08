@@ -162,7 +162,7 @@ fufunction loadSpots(areaCode){
   :`./data/spots/world/${areaCode}.json`;
 
   fetch(filePath)
-  /then(res=>{
+  .then(res=>{
     if(!res.ok)throw new Error("データが取得できませんでした");
     return res.json();
   })
