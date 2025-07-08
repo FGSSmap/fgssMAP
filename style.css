@@ -108,7 +108,7 @@
 .spot-container{display: flex;
                flex-wrap: wrap;
                gap: 20px;
-               padding: 20pz;}
+               padding: 20px;}
 
 .spot-box{width:220px;
          border:1px solid #ccc;
