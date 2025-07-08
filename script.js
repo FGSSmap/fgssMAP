@@ -151,3 +151,41 @@ function showCountryMap(code) {
   document.getElementById("maprange").innerHTML = getIframeHTML(url);
   history.pushState({ country: code }, "", `?country=${code}`);
 }
+
+fufunction loadSpots(areaCode){
+  const spotContainer = document.getElementById("spot-list");
+  if(!spotContainer) return;
+
+  const isJapan = /^[0-9]{2}$/.test(areaCode);
+  const filePath = isJapan 
+  ?`./data/spots/japan/${areaCode}.json`
+  :`./data/spots/world/${areaCode}.json`;
+
+  fetch(filePath)
+  /then(res=>{
+    if(!res.ok)throw new Error("データが取得できませんでした");
+    return res.json();
+  })
+  .then(data=>{
+    spotContainer.HTML = "";
+
+    data.forEach(spot =>{
+      const div=document.createElement("div");
+      div.className = "spot-box";
+
+      const imageTag = spot.image
+      ?`<img src="${spot.image}" alt="${spot.name}">`
+      :`<div class="no-image">画像なし</div>`;
+
+      div.innerHTML = `
+      ${imageTag}
+      <h3>${spot.name}</h3>
+      <p>${spot.comment}</p>`;
+      spotContainer.appendChild(div);
+      });
+  })
+  .catch((err)=>{
+    console.error("読み込みエラー:",err);
+    spotContainer.innerHTML = "<p>観光地情報の読み込みに失敗しました。</p>";
+  });
+}
