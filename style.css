@@ -105,3 +105,30 @@
   stroke: #999999;
 }
 
+.spot-container{display: flex;
+               flex-wrap: wrap;
+               gap: 20px;
+               padding: 20pz;}
+
+.spot-box{width:220px;
+         border:1px solid #ccc;
+         border-radius:10px;
+         padding:12px;
+         background-color: #fff;
+         box-shadow:0 2px 6px rgba(0,0,0,0.1);
+         tetx-align: center;
+         transition: transform 0.2s;}
+
+.spot-box:hover{transform: translateY(-4px);}
+
+.spot-box img{width:100%;
+             height:auto;
+             border-radius:6px;
+             margin-bottom:10px;
+             object-fit:cover;}
+
+.spot-box h3{font-size: 1.1em;
+            margin:0 0 5px 0;}
+
+.spot-box p {font-size:0.9em;
+            color: #555;}
