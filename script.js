@@ -168,7 +168,7 @@ function loadSpots(areaCode){
     return res.json();
   })
   .then(data=>{
-    spotContainer.HTML = "";
+    spotContainer.innerHTML = "";
 
     data.forEach(spot =>{
       const div=document.createElement("div");
