@@ -1,3 +1,7 @@
+.map-buttons{display:flex;
+             justify-content:center;
+             Align-items:center;}
+
 #campus-button,
 #jp-button{width:200px;
               height:50px;
