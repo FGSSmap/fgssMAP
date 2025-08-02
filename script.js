@@ -35,3 +35,5 @@ function switchDisplay(target) {
       });
   }
 }
+
+switchDisplay("campus");
