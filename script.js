@@ -17,7 +17,10 @@ function switchDisplay(target) {
 
   //中身の切り替え
   if (target === "campus") {
-    campusMap.innerHTML = `<iframe src="https://www.google.com/maps/d/u/1/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F" width="640" height="480"></iframe>`;
+
+    const campusMapUrl = "https://www.google.com/maps/d/u/1/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F"
+    
+    campusMap.innerHTML = getframeHTML(campusMapUrl);
   }
 
   if (target === "japan") {
