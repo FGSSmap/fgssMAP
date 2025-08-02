@@ -29,6 +29,14 @@ function switchDisplay(target) {
       .then(svgData => {
         japanMap.innerHTML = svgData;
       })
+        .then(svg => {
+          japanMapDiv.innerHTML = svg;
+          document.querySelectorAll('.geolonia-svg-map .prefecture').forEach(pref => {
+            pref.addEventListener("mouseover", () => pref.style.fill = "#ffaaaa");
+            pref.addEventListener("mouseleave", () => pref.style.fill = "");
+            pref.addEventListener("click", () => showPrefectureMap(pref.dataset.code));
+          });
+        })
       .catch(err => {
         japanMap.innerHTML = `<p>日本地図の読み込みに失敗しました</p>`;
         console.error(err);
@@ -37,3 +45,18 @@ function switchDisplay(target) {
 }
 
 switchDisplay("campus");
+
+// キャンパス
+  document.getElementById("campus-button").addEventListener("click", () => {
+    switchDisplay("campus");
+    document.getElementById("campusMap").innerHTML = getIframeHTML(campusMapUrl);
+    history.pushState({ view: "campus" }, "", "?view=caｍpus");
+  });
+
+//日本
+document.getelementById("jp-button").addEventListener("click", ()=>{
+  switchDisplay("japan");
+  history.pushState({ view: "japan"},"","?view=japan");
+  const japanMapDiv = document.getElementById("japan-map");
+
+})
