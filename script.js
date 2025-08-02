@@ -20,7 +20,7 @@ function switchDisplay(target) {
 
     const campusMapUrl = "https://www.google.com/maps/d/u/1/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F"
     
-    campusMap.innerHTML = getframeHTML(campusMapUrl);
+    campusMap.innerHTML = getIframeHTML(campusMapUrl);
   }
 
   if (target === "japan") {
