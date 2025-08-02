@@ -1,3 +1,27 @@
+//初期設定
+document.addEventListener("DOMContentLoaded", ()=>{
+ const campusMapUrl = 
+   "https://www.google.com/maps/d/u/1/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F"                                               
+})
+
+document.getElementById("campus-map").innerHTML = getIframeHTML(campusMapUrl);
+let selected = document.getelementById("campus-button");
+selected.style.transformOrigin = "bottom center";
+selected.style.transform = "scaleY(1.3)";
+
+  document.querySelectorAll(".map-buttons button").forEach(btn => {
+    btn.addEventListener("click", function () {
+      if (selected !== this) {
+        selected.style.transform = "scaleY(1)";
+        this.style.transformOrigin = "bottom center";
+        this.style.transform = "scaleY(1.3)";
+        selected = this;
+      }
+    });
+  });
+
+
+
 //switchDisplayの指定
 document.getElementById("campus-button").addEventListener("click", () => {
   switchDisplay("campus");
@@ -17,10 +41,8 @@ function switchDisplay(target) {
 
   //中身の切り替え
   if (target === "campus") {
-
-    const campusMapUrl = "https://www.google.com/maps/d/u/1/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F"
     
-    campusMap.innerHTML = getIframeHTML(campusMapUrl);
+    campusMap.innerHTML = getframeHTML(campusMapUrl);
   }
 
   if (target === "japan") {
