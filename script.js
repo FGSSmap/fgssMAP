@@ -73,3 +73,19 @@ document.getElementById("jp-button").addEventListener("click", () => {
   switchDisplay("japan");
   history.pushState({ view: "japan" }, "", "?view=japan");
 });
+
+//履歴で戻る
+window.addEventListener("popstate", (event) => {
+  const state = event.state;
+  if (!state) return;
+
+  if (state.view === "campus") {
+    document.getElementById("campus-button").click();
+  } else if (state.view === "japan") {
+    document.getElementById("jp-button").click();
+  } else if (state.code) {
+    showPrefectureMap(state.code);
+  } else if (state.country) {
+    showCountryMap(state.country);
+  }
+});
