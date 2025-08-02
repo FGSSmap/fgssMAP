@@ -89,3 +89,17 @@ window.addEventListener("popstate", (event) => {
     showCountryMap(state.country);
   }
 });
+
+// 日本地図リンク
+let mapLinks = {};
+fetch("https://fgssmap.github.io/fgssMAP/map-links.json")
+  .then(res => res.json())
+  .then(data => { mapLinks = data; })
+  .catch(err => console.error("地図リンク読み込み失敗", err));
+
+function showPrefectureMap(code) {
+  const url = mapLinks[code];
+  if (!url) {
+    document.getElementById("maprange").innerHTML = "<p>この都道府県の地図はまだ準備中です。</p>";
+    return;
+  }
