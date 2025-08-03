@@ -101,3 +101,5 @@ function showPrefectureMap(code) {
     document.getElementById("campus-map").innerHTML = "<p>この都道府県の地図はまだ準備中です。</p>";
     return;
  }
+
+map
