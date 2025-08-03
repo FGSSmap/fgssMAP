@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function switchDisplay(target) {
   const campusMap = document.getElementById("campus-map");
   const japanMap = document.getElementById("japan-map");
+  const prefMap = document.getElementById("prefecture-map");
 
   // 表示切り替え
   campusMap.style.display = target === "campus" ? "block" : "none";
