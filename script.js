@@ -86,7 +86,7 @@ window.addEventListener("popstate", (event) => {
     document.getElementById("campus-button").click();
   } else if (state.view === "japan") {
     document.getElementById("jp-button").click();
-  } else if (state.code) {
+  } else if (state.view === "pref" && state.code){
     showPrefectureMap(state.code);
   } 
 });
