@@ -53,6 +53,7 @@ function switchDisplay(target) {
           pref.addEventListener("mouseover", () => pref.style.fill = "#ffaaaa");
           pref.addEventListener("mouseleave", () => pref.style.fill = "");
           pref.addEventListener("click", () => showPrefectureMap(pref.dataset.code));
+          pref.addEventListener("mouseover", () => {element.style.cursor = "pointer";});
         });
       })
       .catch(err => {
