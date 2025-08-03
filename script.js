@@ -50,10 +50,10 @@ function switchDisplay(target) {
         japanMap.innerHTML = svgData;
 
         document.querySelectorAll('.geolonia-svg-map .prefecture').forEach(pref => {
-          pref.addEventListener("mouseover", () => pref.style.fill = "#ffaaaa");
+          pref.addEventListener("mouseover", () => {pref.style.fill = "#ffaaaa";
+                                                    pref.style.cursor = "pointer";});
           pref.addEventListener("mouseleave", () => pref.style.fill = "");
           pref.addEventListener("click", () => showPrefectureMap(pref.dataset.code));
-          pref.addEventListener("mouseover", () => {element.style.cursor = "pointer";});
         });
       })
       .catch(err => {
@@ -86,9 +86,6 @@ window.addEventListener("popstate", (event) => {
     document.getElementById("jp-button").click();
   } else if (state.code) {
     showPrefectureMap(state.code);
-  } else if (state.country) {
-    showCountryMap(state.country);
-  }
 });
 
 // 日本地図リンク
@@ -103,4 +100,4 @@ function showPrefectureMap(code) {
   if (!url) {
     document.getElementById("campus-map").innerHTML = "<p>この都道府県の地図はまだ準備中です。</p>";
     return;
-  }
+ }
