@@ -77,7 +77,7 @@ document.getElementById("jp-button").addEventListener("click", () => {
   history.pushState({ view: "japan" }, "", "?view=japan");
 });
 
-//履歴で戻る
+// 履歴で戻る
 window.addEventListener("popstate", (event) => {
   const state = event.state;
   if (!state) return;
@@ -88,6 +88,7 @@ window.addEventListener("popstate", (event) => {
     document.getElementById("jp-button").click();
   } else if (state.code) {
     showPrefectureMap(state.code);
+  } 
 });
 
 // 日本地図リンク
