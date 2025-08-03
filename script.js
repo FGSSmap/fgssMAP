@@ -38,6 +38,7 @@ function switchDisplay(target) {
   // 表示切り替え
   campusMap.style.display = target === "campus" ? "block" : "none";
   japanMap.style.display = target === "japan" ? "block" : "none";
+  prefMap.style.daiplay = target === "pref" ? "block" : "none";
 
   // 中身の切り替え
   if (target === "campus") {
