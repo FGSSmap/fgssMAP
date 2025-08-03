@@ -101,6 +101,6 @@ fetch("https://fgssmap.github.io/fgssMAP/map-links.json")
 function showPrefectureMap(code) {
   const url = mapLinks[code];
   if (!url) {
-    document.getElementById("maprange").innerHTML = "<p>この都道府県の地図はまだ準備中です。</p>";
+    document.getElementById("campus-map").innerHTML = "<p>この都道府県の地図はまだ準備中です。</p>";
     return;
   }
