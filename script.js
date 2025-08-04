@@ -6,6 +6,11 @@ function getIframeHTML(url) {
   return `<iframe src="${url}" width="100%" height="480" frameborder="0" style="border:0;" allowfullscreen></iframe>`;
 }
 
+//定義
+ const campusMap = document.getElementById("campus-map");
+ const japanMap = document.getElementById("japan-map");
+ const prefMap = document.getElementById("prefecture-map");
+
 // 初期設定
 document.addEventListener("DOMContentLoaded", () => {
   const campusMap = document.getElementById("campus-map");
@@ -31,11 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // 表示切り替え関数
 function switchDisplay(target) {
-  const campusMap = document.getElementById("campus-map");
-  const japanMap = document.getElementById("japan-map");
-  const prefMap = document.getElementById("prefecture-map");
-
-  // 表示切り替え
   campusMap.style.display = target === "campus" ? "block" : "none";
   japanMap.style.display = target === "japan" ? "block" : "none";
   prefMap.style.display = target === "pref" ? "block" : "none";
@@ -55,7 +55,10 @@ function switchDisplay(target) {
           pref.addEventListener("mouseover", () => {pref.style.fill = "#ffaaaa";
                                                     pref.style.cursor = "pointer";});
           pref.addEventListener("mouseleave", () => pref.style.fill = "");
-          pref.addEventListener("click", () => showPrefectureMap(pref.dataset.code));
+          pref.addEventListener("click", () => {showPrefectureMap(pref.dataset.code);
+                                               switchDisplay("pref");}
+                               );
+          history.pushState({ view: "pref" },"", "?view=pref");
         });
       })
       .catch(err => {
@@ -68,7 +71,7 @@ function switchDisplay(target) {
 // ボタンクリック時のイベントリスナー
 document.getElementById("campus-button").addEventListener("click", () => {
   switchDisplay("campus");
-  document.getElementById("campus-map").innerHTML = getIframeHTML(campusMapUrl);
+  campusMap.innerHTML = getIframeHTML(campusMapUrl);
   history.pushState({ view: "campus" }, "", "?view=campus");
 });
 
@@ -100,7 +103,6 @@ fetch("https://fgssmap.github.io/fgssMAP/map-links.json")
 
 function showPrefectureMap(code) {
   const url = mapLinks[code];
-  const prefMap = document.getElementById("prefMap");
 
   switchDisplay("pref");
 
@@ -109,7 +111,5 @@ function showPrefectureMap(code) {
     return;
   }
 
-  prefMap.innerHTML = `
-    <iframe src="${url}" width="100%" height="480" style="border:0;" allowfullscreen loading="lazy"></iframe>
-  `;
+  prefMap.innerHTML = getIframeHTML(url);
 }
