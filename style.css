@@ -15,7 +15,8 @@
 }
 
 #campus-map,
-#japan-map{
+#japan-map
+#prefecture-map{
   display:flex;
   justify-content:center; 
   max-width: 1000px;
