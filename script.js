@@ -162,5 +162,5 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("japan-map").style.display = "none";
   document.getElementById("prefecture-map").style.display = "none";
 
-  loadAndDisplayPlacemarks("placemarks-lists/campus.kml", "campus周辺");
+  loadAndDisplayPlacemarks("placemark/campus.kml", "campus周辺");
 });
