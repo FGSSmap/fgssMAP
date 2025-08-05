@@ -113,3 +113,53 @@ function showPrefectureMap(code) {
 
   prefMap.innerHTML = getIframeHTML(url);
 }
+
+function loadAndDisplayPlacemarks(kmlPath, folderName){
+  fetch(kmlPath)
+  .then(response =>{
+    if (!response.ok) throw new Error("KMLの読み込みに失敗しました");
+    return response.text();
+  })
+  .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+  .then(data => {
+    const container = document.getElementById("placemarks-list");
+    container.innerHTML = "";
+
+    const folders = data.getElementsByTagName("folder");
+    for (const folder of folders){
+      const nameTag = folder.getElementsByTagName("name")[0];
+      if (!nameTag) continue;
+
+      if(nameTag.textContent.trim() === folderName){
+        const placemarks = folder.getElementsByTagName("Placemark");
+        for (const placemark of placemarks){
+          const name= placemark.getElementsByTagName("name")[0]?.textContent ||"名称不明";
+          const desc = placemark.getElementsByTagName("description")[0]?.textContent ||"";
+          const coords = placemark.getElementsByTagName("coordinates")[0]?.textContent.trim() ||"";
+          const [lng, lat] = coords.split(",");
+
+          const div = document.createElement("div");
+          div.className = "placemark-box";
+          div.innerHTML = `
+          <h3>${name}</h3>
+          <p>${desc}</p>
+          <p><small>緯度:${{lat},経度:${lng}</small></p>
+          `;
+          container.appendChild(div);                                   
+        }
+        break;
+      }
+    }
+  })
+  .catch(err => {
+    console.error("KML読み込みエラー:",err);
+  });
+  document.addEventListener("DOMContentLoaded", ()=> {
+
+    document.getElementById("campus-map").style.display = "block";
+    document.getElementById("japan-map").style.display = "none";
+    document.getElementById("prefecture-map").style.display = "none";
+
+    loadKMLAndDiplayPlacemarks("placemarks-lists/campus.kml","campus周辺");
+  });
+                            }
