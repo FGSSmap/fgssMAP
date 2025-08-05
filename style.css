@@ -41,11 +41,15 @@
 }
 
 .placemarks {
-  margin-top: 2vh;
   display: flex;
   flex-wrap: wrap;
-  gap: 2vw;
+  gap: 20px;
   justify-content: center;
+  margin: 30px auto 0 auto;
+  padding: 20px;
+  max-width: 1000px;
+  position: relative;
+  z-index: 1;
 }
 
 .placemark-box {
