@@ -144,7 +144,6 @@ function loadAndDisplayPlacemarks(kmlPath) {
         div.innerHTML = `
           <h3>${name}</h3>
           <p>${desc}</p>
-          <p><small>緯度: ${lat}, 経度: ${lng}</small></p>
         `;
         container.appendChild(div);
       }
