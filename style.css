@@ -36,3 +36,13 @@
   border: 2px solid gray;
   border-radius: 10px;
   background-color: #f9f9f9;}
+
+.placemarks{margin-top:20px;}
+
+.placemark-box {dorder:1px solid #CCC;
+               margin-bottom: 15px;
+               padding:10px;
+               background-color:#f9f9f9;
+               boder-radius:6px;}
+
+.placemark-box p {margin: 5px 0;}
