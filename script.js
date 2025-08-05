@@ -40,11 +40,18 @@ function switchDisplay(target) {
   japanMap.style.display = target === "japan" ? "block" : "none";
   prefMap.style.display = target === "pref" ? "block" : "none";
 
+const placemarkContainer = document.getElementById("placemarks-list");
+  
   // 中身の切り替え
   if (target === "campus") {
     campusMap.innerHTML = getIframeHTML(campusMapUrl);
+    placemarkContainer.style.display = "block";
+    loadAndDisplayPlacemarks("placemark/campus.kml");
+  } else{
+    placemarkContainer.style.display = "none";
+    placemarkContaier.innerHTML = "";
   }
-
+}
   if (target === "japan") {
     fetch('japan-map.svg')
       .then(response => response.text())
