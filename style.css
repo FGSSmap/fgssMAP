@@ -1,48 +1,60 @@
-.map-buttons{display:flex;
-             justify-content:center;
-             Align-items:center;}
-
+.map-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 #campus-button,
-#jp-button{width:200px;
-              height:50px;
-              font-size:30px;
-              border-radius:20px;
-              cursor:pointer;
-              transition:transform 0.2s ease;
-              font-family:"Hachi Maru Pop", sans-serif;
-              font-weight:400;
-              font-style:normal;}
-
+#jp-button {
+  width: 20vw;
+  height: 8vh;
+  font-size: 2vw;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  font-family: "Hachi Maru Pop", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
 
 #campus-map,
-#japan-map
-#prefecture-map{
-  display:flex;
-  justify-content:center; 
-  max-width: 1000px;
-  width:100%;
-  height: 450px;
-  margin: 0 auto 30px auto;
+#japan-map,
+#prefecture-map {
+  display: flex;
+  justify-content: center;
+  max-width: 90vw;
+  width: 100%;
+  height: 45vh;
+  margin: 0 auto 3vh auto;
   border: 2px solid gray;
   border-radius: 10px;
   background-color: #f9f9f9;
 }
 
-#japan-map svg {        
-   max-width: 1000px;
-  width:100%;
-  height: 450px;
+#japan-map svg {
+  max-width: 90vw;
+  width: 100%;
+  height: 45vh;
   border: 2px solid gray;
   border-radius: 10px;
-  background-color: #f9f9f9;}
+  background-color: #f9f9f9;
+}
 
-.placemarks{margin-top:20px;}
+.placemarks {
+  margin-top: 2vh;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2vw;
+  justify-content: center;
+}
 
-.placemark-box {dorder:1px solid #CCC;
-               margin-bottom: 15px;
-               padding:10px;
-               background-color:#f9f9f9;
-               boder-radius:6px;}
+.placemark-box {
+  width: 20vw;
+  padding: 1vh 1vw;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
 
-.placemark-box p {margin: 5px 0;}
+.placemark-box
