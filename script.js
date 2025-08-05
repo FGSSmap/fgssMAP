@@ -13,11 +13,6 @@ function getIframeHTML(url) {
 
 // 初期設定
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("campus-map").style.display = "block";
-  document.getElementById("japan-map").style.display = "none";
-  document.getElementById("prefecture-map").style.display = "none";
-
-  loadAndDisplayPlacemarks("placemark/campus.kml");
   const campusMap = document.getElementById("campus-map");
   campusMap.innerHTML = getIframeHTML(campusMapUrl);
 
@@ -166,4 +161,10 @@ function loadAndDisplayPlacemarks(kmlPath) {
     });
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("campus-map").style.display = "block";
+  document.getElementById("japan-map").style.display = "none";
+  document.getElementById("prefecture-map").style.display = "none";
 
+  loadAndDisplayPlacemarks("placemark/campus.kml");
+});
