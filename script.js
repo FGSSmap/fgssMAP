@@ -49,9 +49,9 @@ const placemarkContainer = document.getElementById("placemarks-list");
     loadAndDisplayPlacemarks("placemark/campus.kml");
   } else{
     placemarkContainer.style.display = "none";
-    placemarkContaier.innerHTML = "";
+    placemarkContainer.innerHTML = "";
   }
-}
+
   if (target === "japan") {
     fetch('japan-map.svg')
       .then(response => response.text())
