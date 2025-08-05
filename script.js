@@ -135,7 +135,8 @@ function loadAndDisplayPlacemarks(kmlPath) {
 
       for (const placemark of placemarks) {
         const name = placemark.getElementsByTagName("name")[0]?.textContent || "名称不明";
-        const desc = placemark.getElementsByTagName("description")[0]?.textContent || "";
+        const decsNode = placemark.getElementsByTagName("description")[0];
+        const desc = descNode ? descNode.innerHTML : "";
         const coords = placemark.getElementsByTagName("coordinates")[0]?.textContent.trim() || "";
         const [lng, lat] = coords.split(",");
 
