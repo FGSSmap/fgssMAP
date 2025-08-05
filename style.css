@@ -2,6 +2,7 @@
              justify-content:center;
              Align-items:center;}
 
+
 #campus-button,
 #jp-button{width:200px;
               height:50px;
@@ -11,8 +12,8 @@
               transition:transform 0.2s ease;
               font-family:"Hachi Maru Pop", sans-serif;
               font-weight:400;
-              font-style:normal;
-}
+              font-style:normal;}
+
 
 #campus-map,
 #japan-map
