@@ -13,9 +13,19 @@ function getIframeHTML(url) {
 
 // 初期設定
 document.addEventListener("DOMContentLoaded", () => {
+  // 初期表示設定
   const campusMap = document.getElementById("campus-map");
-  campusMap.innerHTML = getIframeHTML(campusMapUrl);
+  const japanMap = document.getElementById("japan-map");
+  const prefMap = document.getElementById("prefecture-map");
 
+  campusMap.style.display = "block";
+  japanMap.style.display = "none";
+  prefMap.style.display = "none";
+
+  campusMap.innerHTML = getIframeHTML(campusMapUrl);
+  loadAndDisplayPlacemarks("placemark/campus.kml");
+
+  // ボタンの選択状態（スタイル）初期化
   let selected = document.getElementById("campus-button");
   selected.style.transformOrigin = "bottom center";
   selected.style.transform = "scaleY(1.3)";
@@ -31,8 +41,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // 初期表示切り替え
   switchDisplay("campus");
 });
+
 
 // 表示切り替え関数
 function switchDisplay(target) {
@@ -166,10 +178,4 @@ function loadAndDisplayPlacemarks(kmlPath) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("campus-map").style.display = "block";
-  document.getElementById("japan-map").style.display = "none";
-  document.getElementById("prefecture-map").style.display = "none";
 
-  loadAndDisplayPlacemarks("placemark/campus.kml");
-});
