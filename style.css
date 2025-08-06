@@ -66,6 +66,7 @@
 
 .placemark-box {
    flex: 1 1 250px;
+  min-width: 250px;
   max-width: 300px;
   padding: 1vh 1vw;
   background-color: #f9f9f9;
