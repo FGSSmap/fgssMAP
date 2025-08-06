@@ -155,8 +155,8 @@ function loadAndDisplayPlacemarks(kmlPath) {
         const div = document.createElement("div");
         div.className = "placemark-box";
         div.innerHTML = `
-          <h3>${name}</h3>
-          <p>${desc}</p>
+          <p2>${name}</p2>
+          <p><small>${desc}</small></p>
         `;
         container.appendChild(div);
       }
