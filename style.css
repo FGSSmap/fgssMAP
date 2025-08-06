@@ -64,11 +64,12 @@
 }
 
 .placemark-box {
-  width: 100vw;
+  width: 20vw;
   padding: 1vh 1vw;
   background-color: #f9f9f9;
   border: 1px solid #ccc;
   border-radius: 6px;
   box-sizing: border-box;
+  gap:10px;
 }
 
