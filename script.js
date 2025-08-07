@@ -139,6 +139,10 @@ function showPrefectureMap(code) {
 }
 
 function loadAndDisplayPlacemarks(kmlPath) {
+
+  const placemarkContainer = document.getElementById("placemarks-list");
+      placemarkContainer.style.display = "flex";
+  
   fetch(kmlPath)
     .then(response => {
       if (!response.ok) throw new Error("KMLの読み込みに失敗しました");
