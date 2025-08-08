@@ -58,7 +58,6 @@ function switchDisplay(target) {
   // placemark 表示管理
   if (target === "campus") {
     campusMap.innerHTML = getIframeHTML(campusMapUrl);
-    placemarkContainer.style.display = "block";
     loadAndDisplayPlacemarks("placemark/campus.kml");
   } else {
     placemarkContainer.style.display = "none";
@@ -89,6 +88,7 @@ function switchDisplay(target) {
         japanMap.innerHTML = `<p>日本地図の読み込みに失敗しました</p>`;
         console.error(err);
       });
+    placemarkContainer.innerHTML = "";
   }
 }
 
