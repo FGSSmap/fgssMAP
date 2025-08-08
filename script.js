@@ -71,18 +71,19 @@ function switchDisplay(target) {
       .then(svgData => {
         japanMap.innerHTML = svgData;
 
-        document.querySelectorAll(".geolonia-svg-map .prefecture").forEach(pref => {
-          pref.addEventListener("mouseover", () => {
-            pref.style.fill = "#ffaaaa";
-            pref.style.cursor = "pointer";
-          });
-          pref.addEventListener("mouseleave", () => pref.style.fill = "");
-          pref.addEventListener("click", () => {
-            showPrefectureMap(pref.dataset.code);
-            switchDisplay("pref");
-          });
-          history.pushState({ view: "pref" }, "", "?view=pref");
-        });
+     document.querySelectorAll(".geolonia-svg-map .prefecture").forEach(pref => {
+  pref.addEventListener("mouseover", () => {
+    pref.style.fill = "#ffaaaa";
+    pref.style.cursor = "pointer";
+  });
+  pref.addEventListener("mouseleave", () => pref.style.fill = "");
+  pref.addEventListener("click", () => {
+    showPrefectureMap(pref.dataset.code);
+    switchDisplay("pref");
+    history.pushState({ view: "pref" }, "", "?view=pref");
+  });
+});
+
       })
       .catch(err => {
         japanMap.innerHTML = `<p>日本地図の読み込みに失敗しました</p>`;
