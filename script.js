@@ -13,11 +13,7 @@ function getIframeHTML(url) {
 
 // 初期設定
 document.addEventListener("DOMContentLoaded", () => {
-  // 初期表示設定
-  const campusMap = document.getElementById("campus-map");
-  const japanMap = document.getElementById("japan-map");
-  const prefMap = document.getElementById("prefecture-map");
-
+  
   campusMap.style.display = "block";
   japanMap.style.display = "none";
   prefMap.style.display = "none";
