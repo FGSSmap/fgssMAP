@@ -1,19 +1,25 @@
-// グローバルに定義
+// ==========================
+// グローバル定義
+// ==========================
 const campusMapUrl = "https://www.google.com/maps/d/u/1/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F";
 
-// iframeを生成する関数
+const campusMap = document.getElementById("campus-map");
+const japanMap = document.getElementById("japan-map");
+const prefMap = document.getElementById("prefecture-map");
+const placemarkContainer = document.getElementById("placemarks-list");
+
+// ==========================
+// iframe生成関数
+// ==========================
 function getIframeHTML(url) {
-  return `<iframe src="${url}" width="100%" height="480" frameborder="0" style="border:0;" allowfullscreen></iframe>`;
+  return `<iframe src="${url}" width="100%" height="480" style="border:0;" allowfullscreen loading="lazy"></iframe>`;
 }
 
-//定義
- const campusMap = document.getElementById("campus-map");
- const japanMap = document.getElementById("japan-map");
- const prefMap = document.getElementById("prefecture-map");
-
+// ==========================
 // 初期設定
+// ==========================
 document.addEventListener("DOMContentLoaded", () => {
-  
+  // 最初の表示
   campusMap.style.display = "block";
   japanMap.style.display = "none";
   prefMap.style.display = "none";
@@ -21,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   campusMap.innerHTML = getIframeHTML(campusMapUrl);
   loadAndDisplayPlacemarks("placemark/campus.kml");
 
-  // ボタンの選択状態（スタイル）初期化
+  // ボタンのスタイル初期化
   let selected = document.getElementById("campus-button");
   selected.style.transformOrigin = "bottom center";
   selected.style.transform = "scaleY(1.3)";
@@ -37,43 +43,46 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 初期表示切り替え
+  // 初期表示切替
   switchDisplay("campus");
 });
 
-
-// 表示切り替え関数
+// ==========================
+// 表示切替関数
+// ==========================
 function switchDisplay(target) {
   campusMap.style.display = target === "campus" ? "block" : "none";
   japanMap.style.display = target === "japan" ? "block" : "none";
   prefMap.style.display = target === "pref" ? "block" : "none";
 
-const placemarkContainer = document.getElementById("placemarks-list");
-  
-  // 中身の切り替え
+  // placemark 表示管理
   if (target === "campus") {
     campusMap.innerHTML = getIframeHTML(campusMapUrl);
     placemarkContainer.style.display = "block";
     loadAndDisplayPlacemarks("placemark/campus.kml");
-  } else{
+  } else {
     placemarkContainer.style.display = "none";
     placemarkContainer.innerHTML = "";
   }
 
+  // 日本地図の読み込み
   if (target === "japan") {
-    fetch('japan-map.svg')
+    fetch("japan-map.svg")
       .then(response => response.text())
       .then(svgData => {
         japanMap.innerHTML = svgData;
 
-        document.querySelectorAll('.geolonia-svg-map .prefecture').forEach(pref => {
-          pref.addEventListener("mouseover", () => {pref.style.fill = "#ffaaaa";
-                                                    pref.style.cursor = "pointer";});
+        document.querySelectorAll(".geolonia-svg-map .prefecture").forEach(pref => {
+          pref.addEventListener("mouseover", () => {
+            pref.style.fill = "#ffaaaa";
+            pref.style.cursor = "pointer";
+          });
           pref.addEventListener("mouseleave", () => pref.style.fill = "");
-          pref.addEventListener("click", () => {showPrefectureMap(pref.dataset.code);
-                                               switchDisplay("pref");}
-                               );
-          history.pushState({ view: "pref" },"", "?view=pref");
+          pref.addEventListener("click", () => {
+            showPrefectureMap(pref.dataset.code);
+            switchDisplay("pref");
+          });
+          history.pushState({ view: "pref" }, "", "?view=pref");
         });
       })
       .catch(err => {
@@ -83,7 +92,9 @@ const placemarkContainer = document.getElementById("placemarks-list");
   }
 }
 
-// ボタンクリック時のイベントリスナー
+// ==========================
+// ボタンクリックイベント
+// ==========================
 document.getElementById("campus-button").addEventListener("click", () => {
   switchDisplay("campus");
   campusMap.innerHTML = getIframeHTML(campusMapUrl);
@@ -95,7 +106,9 @@ document.getElementById("jp-button").addEventListener("click", () => {
   history.pushState({ view: "japan" }, "", "?view=japan");
 });
 
-// 履歴で戻る
+// ==========================
+// 履歴の戻る・進む対応
+// ==========================
 window.addEventListener("popstate", (event) => {
   const state = event.state;
   if (!state) return;
@@ -104,21 +117,25 @@ window.addEventListener("popstate", (event) => {
     document.getElementById("campus-button").click();
   } else if (state.view === "japan") {
     document.getElementById("jp-button").click();
-  } else if (state.view === "pref" && state.code){
+  } else if (state.view === "pref" && state.code) {
     showPrefectureMap(state.code);
-  } 
+  }
 });
 
-// 日本地図リンク
+// ==========================
+// 日本地図リンクの取得
+// ==========================
 let mapLinks = {};
 fetch("https://fgssmap.github.io/fgssMAP/map-links.json")
   .then(res => res.json())
   .then(data => { mapLinks = data; })
   .catch(err => console.error("地図リンク読み込み失敗", err));
 
+// ==========================
+// 都道府県表示関数
+// ==========================
 function showPrefectureMap(code) {
   const url = mapLinks[code];
-
   switchDisplay("pref");
 
   if (!url) {
@@ -127,18 +144,16 @@ function showPrefectureMap(code) {
   }
 
   prefMap.innerHTML = getIframeHTML(url);
-
-  const placemarkContainer = document.getElementById("placemarks-list");
   placemarkContainer.style.display = "block";
   loadAndDisplayPlacemarks(`placemark/${code}.kml`);
-
 }
 
+// ==========================
+// Placemark 読み込み関数
+// ==========================
 function loadAndDisplayPlacemarks(kmlPath) {
+  placemarkContainer.style.display = "flex";
 
-  const placemarkContainer = document.getElementById("placemarks-list");
-      placemarkContainer.style.display = "flex";
-  
   fetch(kmlPath)
     .then(response => {
       if (!response.ok) throw new Error("KMLの読み込みに失敗しました");
@@ -146,8 +161,7 @@ function loadAndDisplayPlacemarks(kmlPath) {
     })
     .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
     .then(data => {
-      const container = document.getElementById("placemarks-list");
-      container.innerHTML = "";
+      placemarkContainer.innerHTML = "";
 
       const documentTag = data.getElementsByTagName("Document")[0];
       if (!documentTag) {
@@ -170,12 +184,10 @@ function loadAndDisplayPlacemarks(kmlPath) {
           <h3>${name}</h3>
           <p><small>${desc}</small></p>
         `;
-        container.appendChild(div);
+        placemarkContainer.appendChild(div);
       }
     })
     .catch(err => {
       console.error("KML読み込みエラー:", err);
     });
 }
-
-
