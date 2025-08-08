@@ -208,7 +208,7 @@ function loadAndDisplayPrefPlacemarks(code){
     if (!response.ok)throw new Error("KMLの読み込みに失敗しました");
     return response.text();
   })
-  .then(str => new window.DOMParser().parseFromString(str, "text/kml"))
+  .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
   .then(data => {
     const documentTag = data.getElementsByTagName("Document")[0];
     if(!documentTag){
