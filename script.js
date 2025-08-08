@@ -145,8 +145,12 @@ function showPrefectureMap(code) {
   }
 
   prefMap.innerHTML = getIframeHTML(url);
+  
+  
+  const placemarkContainer = document.getElementById("placemarks-list");
   placemarkContainer.style.display = "block";
-  loadAndDisplayPlacemarks(`placemark/${code}.kml`);
+
+  loadAndDisplayPrefPlacemarks(code);
 }
 
 // ==========================
