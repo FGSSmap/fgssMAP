@@ -200,6 +200,7 @@ function loadAndDisplayPlacemarks(kmlPath) {
 function loadAndDisplayPrefPlacemarks(code){
   const placemarkContainer = document.getElementById("placemarks-list");
   placemarkContainer.style.display = "flex";
+  placemarkContainer.style.display = "block";
 
   const kmlPathP = `placemark/${code}.kml`;
   fetch(kmlPathP)
