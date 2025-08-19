@@ -179,15 +179,13 @@ function loadAndDisplayPlacemarks(kmlPath) {
       for (const placemark of placemarks) {
         const name = placemark.getElementsByTagName("name")[0]?.textContent || "名称不明";
         const descNode = placemark.getElementsByTagName("description")[0];
-        const desc = descNode ? descNode.innerHTML : "";
-        const coords = placemark.getElementsByTagName("coordinates")[0]?.textContent.trim() || "";
-        const [lng, lat] = coords.split(",");
+        const descHTML = descNode ? descNode.innerHTML : "";
 
         const div = document.createElement("div");
         div.className = "placemark-box";
         div.innerHTML = `
           <h3>${name}</h3>
-          <p><small>${desc}</small></p>
+          <div class="placemark-desc">${descHTML}</div>
         `;
         placemarkContainer.appendChild(div);
       }
@@ -196,6 +194,7 @@ function loadAndDisplayPlacemarks(kmlPath) {
       console.error("KML読み込みエラー:", err);
     });
 }
+
 
 function loadAndDisplayPrefPlacemarks(code){
   const placemarkContainer = document.getElementById("placemarks-list");
