@@ -75,3 +75,4 @@
   box-sizing: border-box;
 }
 
+.placemark-desc img { max-width: 100%; height: auto; }
