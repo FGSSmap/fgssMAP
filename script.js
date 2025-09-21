@@ -277,15 +277,35 @@ function zoomToCoordinate(lat, lng, name) {
   const activeMapContainer = document.querySelector('.map-container.active');
   if (!activeMapContainer) return;
   
-  // ズーム用のGoogle Maps URL生成（高ズームレベルで詳細表示）
-  const zoomedMapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d500!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sja!2sjp!4v1234567890123!5m2!1sja!2sjp&z=18`;
+  // 現在の iframe を取得
+  const currentIframe = activeMapContainer.querySelector('iframe');
+  if (!currentIframe) return;
   
-  // アニメーション効果でズーム表示
+  // 現在の地図URLを取得
+  let currentUrl = currentIframe.src;
+  let baseUrl = '';
+  
+  // アクティブな地図タイプに応じてベースURLを決定
+  if (activeMapContainer.id === 'campus-map') {
+    baseUrl = campusMapUrl;
+  } else if (activeMapContainer.id === 'world-map') {
+    baseUrl = worldMapUrl;
+  } else {
+    // その他の地図の場合は現在のURLをベースとして使用
+    baseUrl = currentUrl.split('&ll=')[0].split('&z=')[0];
+  }
+  
+  // 座標とズームパラメータを追加して新しいURLを生成
+  const zoomedMapUrl = `${baseUrl}&ll=${lat},${lng}&z=17`;
+  
+  // スムーズなズーム効果
   showZoomAnimation(activeMapContainer, () => {
-    activeMapContainer.innerHTML = getIframeHTML(zoomedMapUrl, `${name} - 詳細地図`);
+    // 既存のiframeのsrcを更新（地図の再読み込みなし！）
+    currentIframe.src = zoomedMapUrl;
+    currentIframe.title = `${name} - 詳細地図`;
     
     // ズームリセットボタンを追加
-    addZoomResetButton(activeMapContainer, name);
+    addZoomResetButton(activeMapContainer, name, baseUrl);
     
     // ユーザーにフィードバックを提供
     showZoomNotification(`📍 ${name} にズームしました`);
@@ -325,7 +345,7 @@ function showZoomAnimation(container, callback) {
   }, 300);
 }
 
-function addZoomResetButton(container, locationName) {
+function addZoomResetButton(container, locationName, originalUrl) {
   // 既存のリセットボタンを削除
   const existingResetBtn = container.querySelector('.zoom-reset-btn');
   if (existingResetBtn) {
@@ -341,38 +361,50 @@ function addZoomResetButton(container, locationName) {
   `;
   resetButton.setAttribute('aria-label', `${locationName}のズームを解除して元の地図に戻る`);
   
+  // 元のURLを data属性として保存
+  resetButton.dataset.originalUrl = originalUrl;
+  
   // リセットボタンのクリックイベント
   resetButton.addEventListener('click', () => {
-    resetMapView(container);
+    resetMapView(container, originalUrl);
   });
   
   // ボタンをコンテナに追加
   container.appendChild(resetButton);
 }
 
-function resetMapView(container) {
-  const containerId = container.id;
+function resetMapView(container, originalUrl) {
+  const currentIframe = container.querySelector('iframe');
+  if (!currentIframe) return;
   
   showZoomAnimation(container, () => {
-    // 元の地図に戻す
-    switch (containerId) {
-      case 'campus-map':
-        container.innerHTML = getIframeHTML(campusMapUrl, "キャンパス周辺地図");
-        break;
-      case 'world-map':
-        const currentRegionValue = regionSelect.value;
-        if (currentRegionValue && regionSettings[currentRegionValue]) {
-          const setting = regionSettings[currentRegionValue];
-          const regionMapUrl = `${worldMapUrl}&ll=${setting.center}&z=${setting.zoom}`;
-          container.innerHTML = getIframeHTML(regionMapUrl, `${setting.name}地図`);
-        } else {
-          container.innerHTML = getIframeHTML(worldMapUrl, "世界地図");
-        }
-        break;
-      case 'prefecture-map':
-        // 都道府県地図の場合は現在の都道府県地図に戻す
-        // この部分は既存の地図URLを保持する仕組みが必要
-        break;
+    // 既存のiframeのsrcを元のURLに戻す（スムーズ！）
+    if (originalUrl) {
+      currentIframe.src = originalUrl;
+    } else {
+      // フォールバック: コンテナIDに基づいて元のURLを決定
+      const containerId = container.id;
+      switch (containerId) {
+        case 'campus-map':
+          currentIframe.src = campusMapUrl;
+          currentIframe.title = "キャンパス周辺地図";
+          break;
+        case 'world-map':
+          const currentRegionValue = regionSelect.value;
+          if (currentRegionValue && regionSettings[currentRegionValue]) {
+            const setting = regionSettings[currentRegionValue];
+            currentIframe.src = `${worldMapUrl}&ll=${setting.center}&z=${setting.zoom}`;
+            currentIframe.title = `${setting.name}地図`;
+          } else {
+            currentIframe.src = worldMapUrl;
+            currentIframe.title = "世界地図";
+          }
+          break;
+        default:
+          // その他の地図の場合
+          currentIframe.src = currentIframe.src.split('&ll=')[0].split('&z=')[0];
+          break;
+      }
     }
     
     // リセットボタンを削除
