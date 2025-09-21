@@ -784,7 +784,7 @@ function setupPrefectureClicks() {
     
     // ホバーエフェクト
     pref.addEventListener("mouseover", () => {
-      pref.setAttribute('fill', 'var(--yellow-accent)');
+      pref.setAttribute('fill', '#fff799'); // CSS変数の代わりに直接色指定
       pref.style.cursor = 'pointer';
     });
     
@@ -792,18 +792,28 @@ function setupPrefectureClicks() {
       pref.setAttribute('fill', '#EEEEEE');
     });
     
-    // クリックイベント
-    pref.addEventListener("click", () => {
+    // クリックイベント（デバッグ強化版）
+    pref.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      
       console.log(`🗺️ ${title}がクリックされました (code: ${code})`);
-      if (code) {
+      console.log(`📍 mapLinks[${code}]:`, mapLinks[code] ? '利用可能' : '未定義');
+      
+      if (code && mapLinks[code]) {
+        console.log(`✅ 地図表示開始: ${title}`);
         showPrefectureMap(code);
-      } else {
+      } else if (!code) {
         console.warn('⚠️ 都道府県コードが見つかりません');
+      } else if (!mapLinks[code]) {
+        console.warn(`⚠️ 都道府県コード${code}の地図URLが見つかりません`);
+        showNotification(`${title}の地図は準備中です`, 'warning');
       }
     });
   });
   
   console.log('✅ 都道府県クリックイベント設定完了');
+  console.log('🔍 mapLinksの状態:', Object.keys(mapLinks).length, '件の都道府県地図URL');
 }
 
 // ==========================
@@ -811,9 +821,13 @@ function setupPrefectureClicks() {
 // ==========================
 
 function showPrefectureMap(code) {
+  console.log(`🚀 showPrefectureMap開始: コード${code}`);
+  
   const url = mapLinks[code];
+  console.log(`📍 取得したURL:`, url);
   
   if (!url) {
+    console.warn(`❌ 都道府県コード${code}のURLが見つかりません`);
     showNotification('この地域の地図はまだ準備中です', 'warning');
     return;
   }
@@ -822,14 +836,27 @@ function showPrefectureMap(code) {
   const backButton = document.getElementById('back-to-japan');
   if (backButton) {
     backButton.style.display = 'flex';
+    console.log('✅ 戻るボタンを表示');
+  } else {
+    console.warn('⚠️ 戻るボタンが見つかりません');
   }
   
   // 日本地図コンテナに都道府県地図を表示
   if (japanMap) {
+    console.log('🗾 日本地図コンテナを確認');
+    
     // 既存のSVGを非表示にして、iframeを表示
     const existingSvg = japanMap.querySelector('.geolonia-svg-map');
     if (existingSvg) {
       existingSvg.style.display = 'none';
+      console.log('✅ 既存のSVGを非表示');
+    }
+    
+    // 既存の都道府県地図コンテナがあれば削除
+    const existingContainer = japanMap.querySelector('.prefecture-iframe-container');
+    if (existingContainer) {
+      existingContainer.remove();
+      console.log('🗑️ 既存の都道府県地図を削除');
     }
     
     // 都道府県地図のiframeを挿入
@@ -838,11 +865,14 @@ function showPrefectureMap(code) {
     iframeContainer.innerHTML = getIframeHTML(url, "都道府県地図");
     japanMap.appendChild(iframeContainer);
     
-    console.log(`🗺️ 都道府県地図表示: コード${code}`);
+    console.log(`🎉 都道府県地図表示完了: コード${code}`);
+  } else {
+    console.error('❌ japanMap要素が見つかりません');
   }
   
   // 都道府県別のKMLファイルがあれば読み込み（オプション）
   const kmlPath = `placemark/${code}.kml`;
+  console.log(`📁 KMLファイル読み込み試行: ${kmlPath}`);
   loadAndDisplayPlacemarks(kmlPath);
 }
 
@@ -917,9 +947,17 @@ resetRegionBtn.addEventListener('click', function() {
   updateHistory("world");
 });
 
-// 日本地図に戻るボタンのイベント
-document.getElementById('back-to-japan').addEventListener('click', function() {
-  backToJapanMap();
+// 日本地図に戻るボタンのイベント（安全な設定）
+document.addEventListener('DOMContentLoaded', function() {
+  const backButton = document.getElementById('back-to-japan');
+  if (backButton) {
+    backButton.addEventListener('click', function() {
+      backToJapanMap();
+    });
+    console.log('✅ 戻るボタンイベントリスナー設定完了');
+  } else {
+    console.warn('⚠️ 戻るボタンが見つかりません（初期化時）');
+  }
 });
 
 // ==========================
