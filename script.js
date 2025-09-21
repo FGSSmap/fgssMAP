@@ -827,8 +827,22 @@ function loadJapanMapDirectly() {
       console.log(`🗾 表示された都道府県: ${prefectures.length}個`);
       
       if (prefectures.length > 0) {
-        setupPrefectureClicks();
-        console.log('🎉 日本地図完全表示成功！');
+        // mapLinksの読み込み完了を待ってからsetupPrefectureClicks実行
+        if (Object.keys(mapLinks).length > 0) {
+          setupPrefectureClicks();
+          console.log('🎉 日本地図完全表示成功！');
+        } else {
+          console.log('⏳ mapLinks読み込み待機中...');
+          // 1秒後に再試行
+          setTimeout(() => {
+            if (Object.keys(mapLinks).length > 0) {
+              setupPrefectureClicks();
+              console.log('🎉 日本地図完全表示成功！（遅延）');
+            } else {
+              console.warn('⚠️ mapLinks読み込みタイムアウト');
+            }
+          }, 1000);
+        }
       } else {
         console.warn('⚠️ 都道府県要素が見つかりません');
       }
@@ -888,6 +902,7 @@ function setupPrefectureClicks() {
   
   console.log('✅ 都道府県クリックイベント設定完了');
   console.log('🔍 mapLinksの状態:', Object.keys(mapLinks).length, '件の都道府県地図URL');
+  console.log('🗂️ mapLinks詳細:', mapLinks);
 }
 
 // ==========================
