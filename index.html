@@ -3,13 +3,12 @@
 <head>
   <link rel="stylesheet" href="fonts.css">
   <meta charset="UTF-8">
-  <title>FGSSmap</title> <!-- ← これはブラウザタブの表示用 -->
+  <title>FGSSmap</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <!-- ヘッダー：ロゴ＋タイトル＋説明文 -->
-   <header class="header">
+  <header class="header">
     <div class="logo-title">
       <img src="FGSSmap-icon.png" alt="アイコン" class="logo">
       <h1 class="title1">
@@ -28,6 +27,7 @@
 　<div class="map-buttons">
   <button id="campus-button" style="color: black;">キャンパス周辺</button>
   <button id="jp-button" style="color: black;">日本</button>
+  <button id="world-button" style="color: black;">世界</button>
 </div>
   <div class="map-area">
    <div id="campus-map">
@@ -35,12 +35,12 @@
 </div>
     <div id="japan-map" style="display:none;"></div>
     <div id="prefecture-map" style="display: none;"></div>
+    <div id="world-map" style="display: none;"></div>
   </div>
 
 <div class="placemarks" id="placemarks-list">
 </div>  
   
-  <!-- ✅ JavaScriptファイルの読み込み（bodyの最後） -->
   <script src="script.js"></script>
 </body>
 </html>
