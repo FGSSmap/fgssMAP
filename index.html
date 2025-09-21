@@ -8,38 +8,57 @@
 </head>
 
 <body>
+  <!-- ヘッダー：ロゴ＋タイトル＋説明文 -->
   <header class="header">
     <div class="logo-title">
       <img src="FGSSmap-icon.png" alt="アイコン" class="logo">
       <h1 class="title1">
-         <span style="color: #ffb6c1;">F</span>
+        <span style="color: #ffb6c1;">F</span>
         <span style="color: #19b78f;">G</span>
-  <span style="color: #ffb6c1;">S</span>
-  <span style="color: #bbdbf3;">S</span>
-  <span style="color: #d6adff;">m</span>
-  <span style="color: #19b78f;">a</span>
-  <span style="color: #fff799;">p</span>
+        <span style="color: #ffb6c1;">S</span>
+        <span style="color: #bbdbf3;">S</span>
+        <span style="color: #d6adff;">m</span>
+        <span style="color: #19b78f;">a</span>
+        <span style="color: #fff799;">p</span>
       </h1>
-       <p class="subtitle">本マップは、国際総合科学部の創設10周年を記念して制作された記念コンテンツです。
-  歴代の学部生が世界のさまざまな場所で過ごした、かけがえのない時間、その一瞬一瞬が、地図の上にちりばめられています。世界を舞台にしたGDSSの旅を、ぜひ一緒にお楽しみください。</p>
+      <p class="subtitle">本マップは、国際総合科学部の創設10周年を記念して制作された記念コンテンツです。
+        歴代の学部生が世界のさまざまな場所で過ごした、かけがえのない時間、その一瞬一瞬が、地図の上にちりばめられています。世界を舞台にしたGDSSの旅を、ぜひ一緒にお楽しみください。</p>
     </div>
   </header>
-　<div class="map-buttons">
-  <button id="campus-button" style="color: black;">キャンパス周辺</button>
-  <button id="jp-button" style="color: black;">日本</button>
-  <button id="world-button" style="color: black;">世界</button>
-</div>
+
+  <!-- 地図切り替えボタン -->
+  <div class="map-buttons">
+    <button id="campus-button" style="color: black;">キャンパス周辺</button>
+    <button id="jp-button" style="color: black;">日本</button>
+    <button id="world-button" style="color: black;">世界</button>
+  </div>
+
+  <!-- 地域選択（世界地図選択時のみ表示） -->
+  <div class="region-selector">
+    <select id="region-select">
+      <option value="">地域</option>
+      <option value="asia">アジア</option>
+      <option value="europe">ヨーロッパ</option>
+      <option value="africa">アフリカ</option>
+      <option value="oceania">オセアニア</option>
+      <option value="north-america">北米</option>
+    </select>
+    <div id="selected-region" style="display: none;"></div>
+  </div>
+
+  <!-- 地図エリア -->
   <div class="map-area">
-   <div id="campus-map">
-  <iframe src="https://www.google.com/maps/d/u/1/embed?mid=..." allowfullscreen="" loading="lazy"></iframe>
-</div>
+    <div id="campus-map">
+      <iframe src="https://www.google.com/maps/d/u/1/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F" allowfullscreen="" loading="lazy"></iframe>
+    </div>
     <div id="japan-map" style="display:none;"></div>
     <div id="prefecture-map" style="display: none;"></div>
     <div id="world-map" style="display: none;"></div>
   </div>
 
-<div class="placemarks" id="placemarks-list">
-</div>  
+  <!-- プレースマーク一覧 -->
+  <div class="placemarks" id="placemarks-list">
+  </div>  
   
   <script src="script.js"></script>
 </body>
