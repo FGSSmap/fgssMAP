@@ -53,6 +53,64 @@ function handleError(error, context = '') {
   showLoading(false);
 }
 
+// 通知表示機能
+function showNotification(message, type = 'info') {
+  console.log(`📢 通知 [${type}]: ${message}`);
+  
+  // 通知コンテナを作成または取得
+  let notificationContainer = document.getElementById('notification-container');
+  if (!notificationContainer) {
+    notificationContainer = document.createElement('div');
+    notificationContainer.id = 'notification-container';
+    notificationContainer.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+      max-width: 400px;
+    `;
+    document.body.appendChild(notificationContainer);
+  }
+  
+  // 通知要素を作成
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    background: ${type === 'warning' ? '#fff3cd' : type === 'error' ? '#f8d7da' : '#d4edda'};
+    color: ${type === 'warning' ? '#856404' : type === 'error' ? '#721c24' : '#155724'};
+    border: 1px solid ${type === 'warning' ? '#ffeaa7' : type === 'error' ? '#f5c6cb' : '#c3e6cb'};
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+  `;
+  notification.textContent = message;
+  
+  // 通知を追加
+  notificationContainer.appendChild(notification);
+  
+  // アニメーションで表示
+  setTimeout(() => {
+    notification.style.opacity = '1';
+    notification.style.transform = 'translateX(0)';
+  }, 100);
+  
+  // 3秒後に自動的に非表示
+  setTimeout(() => {
+    notification.style.opacity = '0';
+    notification.style.transform = 'translateX(100%)';
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 300);
+  }, 3000);
+}
+
 // 画像URL抽出（KMLのCDATA内から）
 function extractImageFromDescription(description) {
   if (!description) return null;
@@ -105,18 +163,33 @@ async function loadRegionSettings() {
 
 // 都道府県地図リンクデータの読み込み
 async function loadMapLinks() {
+  console.log('🔄 map-links.json読み込み開始...');
   try {
     const response = await fetch("map-links.json");
+    console.log('📡 fetch応答:', response.status, response.statusText);
+    
     if (!response.ok) throw new Error('都道府県地図リンクの読み込みに失敗しました');
+    
     mapLinks = await response.json();
     console.log(`🗺️ 都道府県地図リンク読み込み完了: ${Object.keys(mapLinks).length}件`);
+    console.log('📋 読み込まれたコード:', Object.keys(mapLinks).sort((a, b) => parseInt(a) - parseInt(b)).join(', '));
+    
+    // サンプルURLの検証
+    const sampleCodes = ['1', '13', '35', '47'];
+    sampleCodes.forEach(code => {
+      console.log(`  - コード${code}: ${mapLinks[code] ? '✅ 利用可能' : '❌ 未定義'}`);
+    });
+    
   } catch (error) {
+    console.error('❌ map-links.json読み込みエラー:', error);
     handleError(error, '都道府県地図リンク読み込み');
+    
     // フォールバック用のサンプルデータ
     mapLinks = {
       "35": "https://www.google.com/maps/d/u/1/embed?mid=12x9JFP0cGemf1I-9m7wQfdvnkGmDnFM&ehbc=2E312F",
       "13": "https://www.google.com/maps/d/u/0/embed?mid=1hd1lrXF95AJvQKRDzkoIBUEykyV09U4&ehbc=2E312F"
     };
+    console.log('🔧 フォールバックデータを使用（山口県・東京都のみ）');
   }
 }
 
@@ -780,7 +853,8 @@ function setupPrefectureClicks() {
   prefectures.forEach((pref, index) => {
     const code = pref.dataset.code;
     const title = pref.querySelector('title')?.textContent || `都道府県${index}`;
-    console.log(`  - ${title} (code: ${code})`);
+    const hasUrl = mapLinks[code] ? '✅' : '❌';
+    console.log(`  - ${title} (code: ${code}) ${hasUrl}`);
     
     // ホバーエフェクト
     pref.addEventListener("mouseover", () => {
