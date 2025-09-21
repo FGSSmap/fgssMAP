@@ -103,17 +103,20 @@ async function loadRegionSettings() {
   }
 }
 
-// 地図リンクデータの読み込み
+// 都道府県地図リンクデータの読み込み
 async function loadMapLinks() {
   try {
-    // サンプルデータ（実際のプロジェクトでは外部ファイルから読み込み）
-    mapLinks = {
-      "35": "https://www.google.com/maps/d/embed?mid=sample-yamaguchi",
-      "13": "https://www.google.com/maps/d/embed?mid=sample-tokyo"
-      // 他の都道府県も追加可能
-    };
+    const response = await fetch("map-links.json");
+    if (!response.ok) throw new Error('都道府県地図リンクの読み込みに失敗しました');
+    mapLinks = await response.json();
+    console.log(`🗺️ 都道府県地図リンク読み込み完了: ${Object.keys(mapLinks).length}件`);
   } catch (error) {
-    handleError(error, '地図リンク読み込み');
+    handleError(error, '都道府県地図リンク読み込み');
+    // フォールバック用のサンプルデータ
+    mapLinks = {
+      "35": "https://www.google.com/maps/d/u/1/embed?mid=12x9JFP0cGemf1I-9m7wQfdvnkGmDnFM&ehbc=2E312F",
+      "13": "https://www.google.com/maps/d/u/0/embed?mid=1hd1lrXF95AJvQKRDzkoIBUEykyV09U4&ehbc=2E312F"
+    };
   }
 }
 
@@ -810,23 +813,71 @@ function setupPrefectureClicks() {
 function showPrefectureMap(code) {
   const url = mapLinks[code];
   
-  switchDisplay("pref");
-  
   if (!url) {
-    prefMap.innerHTML = `
-      <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: var(--surface-secondary); flex-direction: column; gap: 1rem;">
-        <i class="fas fa-map" style="font-size: 3rem; color: var(--text-secondary);"></i>
-        <p style="color: var(--text-secondary);">この地域の地図はまだ準備中です</p>
-      </div>
-    `;
+    showNotification('この地域の地図はまだ準備中です', 'warning');
     return;
   }
   
-  prefMap.innerHTML = getIframeHTML(url, "都道府県地図");
+  // 戻るボタンを表示
+  const backButton = document.getElementById('back-to-japan');
+  if (backButton) {
+    backButton.style.display = 'flex';
+  }
   
-  // 都道府県別のKMLファイルがあれば読み込み
+  // 日本地図コンテナに都道府県地図を表示
+  if (japanMap) {
+    // 既存のSVGを非表示にして、iframeを表示
+    const existingSvg = japanMap.querySelector('.geolonia-svg-map');
+    if (existingSvg) {
+      existingSvg.style.display = 'none';
+    }
+    
+    // 都道府県地図のiframeを挿入
+    const iframeContainer = document.createElement('div');
+    iframeContainer.className = 'prefecture-iframe-container';
+    iframeContainer.innerHTML = getIframeHTML(url, "都道府県地図");
+    japanMap.appendChild(iframeContainer);
+    
+    console.log(`🗺️ 都道府県地図表示: コード${code}`);
+  }
+  
+  // 都道府県別のKMLファイルがあれば読み込み（オプション）
   const kmlPath = `placemark/${code}.kml`;
   loadAndDisplayPlacemarks(kmlPath);
+}
+
+// 日本地図に戻る関数
+function backToJapanMap() {
+  console.log('🔄 日本地図に戻る');
+  
+  // 戻るボタンを非表示
+  const backButton = document.getElementById('back-to-japan');
+  if (backButton) {
+    backButton.style.display = 'none';
+  }
+  
+  // 都道府県地図のiframeを削除
+  const iframeContainer = japanMap.querySelector('.prefecture-iframe-container');
+  if (iframeContainer) {
+    iframeContainer.remove();
+  }
+  
+  // 日本地図SVGを再表示
+  const existingSvg = japanMap.querySelector('.geolonia-svg-map');
+  if (existingSvg) {
+    existingSvg.style.display = 'block';
+  } else {
+    // SVGが存在しない場合は再読み込み
+    loadJapanMapDirectly();
+  }
+  
+  // プレースマークを非表示
+  if (placemarkContainer) {
+    placemarkContainer.classList.remove('show');
+    placemarkContainer.innerHTML = '';
+  }
+  
+  console.log('✅ 日本地図復帰完了');
 }
 
 // ==========================
@@ -864,6 +915,11 @@ resetRegionBtn.addEventListener('click', function() {
   resetRegionSelection();
   worldMap.innerHTML = getIframeHTML(worldMapUrl, "世界地図");
   updateHistory("world");
+});
+
+// 日本地図に戻るボタンのイベント
+document.getElementById('back-to-japan').addEventListener('click', function() {
+  backToJapanMap();
 });
 
 // ==========================
