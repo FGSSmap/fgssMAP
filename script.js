@@ -921,13 +921,13 @@ function showPrefectureMap(code) {
     return;
   }
   
-  // 戻るボタンを表示
-  const backButton = document.getElementById('back-to-japan');
-  if (backButton) {
-    backButton.style.display = 'flex';
+  // 戻るボタンコンテナを表示
+  const backButtonContainer = document.getElementById('back-button-container');
+  if (backButtonContainer) {
+    backButtonContainer.style.display = 'block';
     console.log('✅ 戻るボタンを表示');
   } else {
-    console.warn('⚠️ 戻るボタンが見つかりません');
+    console.warn('⚠️ 戻るボタンコンテナが見つかりません');
   }
   
   // 日本地図コンテナに都道府県地図を表示
@@ -969,10 +969,10 @@ function showPrefectureMap(code) {
 function backToJapanMap() {
   console.log('🔄 日本地図に戻る');
   
-  // 戻るボタンを非表示
-  const backButton = document.getElementById('back-to-japan');
-  if (backButton) {
-    backButton.style.display = 'none';
+  // 戻るボタンコンテナを非表示
+  const backButtonContainer = document.getElementById('back-button-container');
+  if (backButtonContainer) {
+    backButtonContainer.style.display = 'none';
   }
   
   // 都道府県地図のiframeを削除
