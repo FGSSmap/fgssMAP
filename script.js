@@ -165,7 +165,7 @@ async function loadRegionSettings() {
 async function loadMapLinks() {
   console.log('🔄 map-links.json読み込み開始...');
   try {
-    const response = await fetch("map-links.json");
+    const response = await fetch(`map-links.json?v=${Date.now()}`);
     console.log('📡 fetch応答:', response.status, response.statusText);
     
     if (!response.ok) throw new Error('都道府県地図リンクの読み込みに失敗しました');
