@@ -1,8 +1,8 @@
 // ==========================
 // グローバル定義
 // ==========================
-const campusMapUrl = "https://www.google.com/maps/d/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F";
-const worldMapUrl = "https://www.google.com/maps/d/embed?mid=1qtamWdIhe4du3uLXQxcD9IrGgNgaVoc&ehbc=2E312F" ;
+const campusMapUrl = "https://www.google.com/maps/d/u/1/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F";
+const worldMapUrl = "https://www.google.com/maps/d/embed?mid=1qtamWdIhe4du3uLXQxcD9IrGgNgaVoc&ehbc=2E312F";
 
 const campusMap = document.getElementById("campus-map");
 const japanMap = document.getElementById("japan-map");
@@ -10,11 +10,34 @@ const prefMap = document.getElementById("prefecture-map");
 const worldMap = document.getElementById("world-map");
 const placemarkContainer = document.getElementById("placemarks-list");
 
+// 地域設定を外部ファイルから読み込み
+let regionSettings = {};
+fetch("region-settings.json")
+  .then(res => res.json())
+  .then(data => { regionSettings = data; })
+  .catch(err => console.error("地域設定読み込み失敗", err));
+
 // ==========================
 // iframe生成関数
 // ==========================
 function getIframeHTML(url) {
   return `<iframe src="${url}" width="100%" height="480" style="border:0;" allowfullscreen loading="lazy"></iframe>`;
+}
+
+// ==========================
+// 地域選択の表示/非表示制御
+// ==========================
+function toggleRegionSelector(show) {
+  const regionSelector = document.querySelector('.region-selector');
+  if (show) {
+    regionSelector.style.display = 'flex';
+  } else {
+    regionSelector.style.display = 'none';
+    // リセット
+    document.getElementById('region-select').style.display = 'block';
+    document.getElementById('selected-region').style.display = 'none';
+    document.getElementById('region-select').value = '';
+  }
 }
 
 // ==========================
@@ -59,6 +82,9 @@ function switchDisplay(target) {
   prefMap.style.display = target === "pref" ? "block" : "none";
   worldMap.style.display = target === "world" ? "block" : "none";
 
+  // 地域選択の表示制御
+  toggleRegionSelector(target === "world");
+
   // placemark 表示管理
   if (target === "campus") {
     campusMap.innerHTML = getIframeHTML(campusMapUrl);
@@ -79,19 +105,18 @@ function switchDisplay(target) {
       .then(svgData => {
         japanMap.innerHTML = svgData;
 
-     document.querySelectorAll(".geolonia-svg-map .prefecture").forEach(pref => {
-  pref.addEventListener("mouseover", () => {
-    pref.style.fill = "#ffaaaa";
-    pref.style.cursor = "pointer";
-  });
-  pref.addEventListener("mouseleave", () => pref.style.fill = "");
-  pref.addEventListener("click", () => {
-    showPrefectureMap(pref.dataset.code);
-    switchDisplay("pref");
-    history.pushState({ view: "pref" }, "", "?view=pref");
-  });
-});
-
+        document.querySelectorAll(".geolonia-svg-map .prefecture").forEach(pref => {
+          pref.addEventListener("mouseover", () => {
+            pref.style.fill = "#ffaaaa";
+            pref.style.cursor = "pointer";
+          });
+          pref.addEventListener("mouseleave", () => pref.style.fill = "");
+          pref.addEventListener("click", () => {
+            showPrefectureMap(pref.dataset.code);
+            switchDisplay("pref");
+            history.pushState({ view: "pref" }, "", "?view=pref");
+          });
+        });
       })
       .catch(err => {
         japanMap.innerHTML = `<p>日本地図の読み込みに失敗しました</p>`;
@@ -118,6 +143,35 @@ document.getElementById("jp-button").addEventListener("click", () => {
 document.getElementById("world-button").addEventListener("click", () => {
   switchDisplay("world");
   history.pushState({ view: "world" }, "", "?view=world");
+});
+
+// ==========================
+// 地域選択イベント
+// ==========================
+document.getElementById('region-select').addEventListener('change', function() {
+  const selectedValue = this.value;
+  if (selectedValue && regionSettings[selectedValue]) {
+    const setting = regionSettings[selectedValue];
+    const regionName = setting.name;
+    
+    // 地図の範囲変更（新しい世界地図URL）
+    const newUrl = `https://www.google.com/maps/d/embed?mid=1qtamWdIhe4du3uLXQxcD9IrGgNgaVoc&ehbc=2E312F&ll=${setting.center}&z=${setting.zoom}`;
+    worldMap.innerHTML = getIframeHTML(newUrl);
+    
+    // 選択された地域名を表示
+    document.getElementById('region-select').style.display = 'none';
+    document.getElementById('selected-region').style.display = 'block';
+    document.getElementById('selected-region').textContent = regionName;
+  }
+});
+
+// 選択された地域名をクリックしたらドロップダウンに戻る
+document.getElementById('selected-region').addEventListener('click', function() {
+  document.getElementById('region-select').style.display = 'block';
+  document.getElementById('selected-region').style.display = 'none';
+  document.getElementById('region-select').value = '';
+  // 世界地図をデフォルトに戻す
+  worldMap.innerHTML = getIframeHTML(worldMapUrl);
 });
 
 // ==========================
@@ -160,7 +214,6 @@ function showPrefectureMap(code) {
   }
 
   prefMap.innerHTML = getIframeHTML(url);
-  
   
   const placemarkContainer = document.getElementById("placemarks-list");
   placemarkContainer.style.display = "block";
@@ -209,7 +262,6 @@ function loadAndDisplayPlacemarks(kmlPath) {
       console.error("KML読み込みエラー:", err);
     });
 }
-
 
 function loadAndDisplayPrefPlacemarks(code){
   const placemarkContainer = document.getElementById("placemarks-list");
