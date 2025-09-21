@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <link rel="stylesheet" href="fonts.css">
   <meta charset="UTF-8">
-  <title>FGSSmap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FGSSmap - 国際総合科学部10周年記念マップ</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
 </head>
 
 <body>
   <!-- ヘッダー：ロゴ＋タイトル＋説明文 -->
   <header class="header">
     <div class="logo-title">
-      <img src="FGSSmap-icon.png" alt="アイコン" class="logo">
+      <img src="FGSSmap-icon.png" alt="FGSSmap アイコン" class="logo">
       <h1 class="title1">
-         <span style="color: #ffb6c1;">F</span>
+        <span style="color: #ffb6c1;">F</span>
         <span style="color: #19b78f;">G</span>
         <span style="color: #ffb6c1;">S</span>
         <span style="color: #bbdbf3;">S</span>
@@ -21,50 +26,88 @@
         <span style="color: #19b78f;">a</span>
         <span style="color: #fff799;">p</span>
       </h1>
-       <p class="subtitle">本マップは、国際総合科学部の創設10周年を記念して制作された記念コンテンツです。
-  歴代の学部生が世界のさまざまな場所で過ごした、かけがえのない時間、その一瞬一瞬が、地図の上にちりばめられています。世界を舞台にしたGDSSの旅を、ぜひ一緒にお楽しみください。</p>
+      <p class="subtitle">
+        本マップは、国際総合科学部の創設10周年を記念して制作された記念コンテンツです。
+        歴代の学部生が世界のさまざまな場所で過ごした、かけがえのない時間、その一瞬一瞬が、
+        地図の上にちりばめられています。世界を舞台にしたGDSSの旅を、ぜひ一緒にお楽しみください。
+      </p>
     </div>
   </header>
-  
-  <!-- 地図選択ボタン -->
-  <div class="map-buttons">
-    <button id="campus-button" style="color: black;">キャンパス周辺</button>
-    <button id="jp-button" style="color: black;">日本</button>
-    <button id="world-button" style="color: black;">世界</button>
+
+  <!-- メイン地図選択ボタン -->
+  <nav class="map-buttons">
+    <button id="campus-button" class="map-btn active" aria-label="キャンパス周辺地図">
+      <i class="fas fa-university"></i>
+      <span>キャンパス周辺</span>
+    </button>
+    <button id="jp-button" class="map-btn" aria-label="日本地図">
+      <i class="fas fa-torii-gate"></i>
+      <span>日本</span>
+    </button>
+    <button id="world-button" class="map-btn" aria-label="世界地図">
+      <i class="fas fa-globe"></i>
+      <span>世界</span>
+    </button>
+  </nav>
+
+  <!-- 地域選択（世界地図時のみ表示） -->
+  <div class="region-selector" id="region-selector">
+    <select id="region-select" aria-label="地域を選択">
+      <option value="">地域を選択してください</option>
+      <option value="asia">🌏 アジア</option>
+      <option value="europe">🇪🇺 ヨーロッパ</option>
+      <option value="africa">🌍 アフリカ</option>
+      <option value="oceania">🇦🇺 オセアニア</option>
+      <option value="north-america">🇺🇸 北米</option>
+    </select>
+    <div id="selected-region" class="selected-region">
+      <span id="region-name"></span>
+      <button id="reset-region" aria-label="地域選択をリセット">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
   </div>
 
-  <!-- 地域選択ドロップダウン（世界地図時のみ表示） -->
-  <div class="region-selector">
-    <select id="region-select">
-      <option value="">地域</option>
-      <option value="asia">アジア</option>
-      <option value="europe">ヨーロッパ</option>
-      <option value="africa">アフリカ</option>
-      <option value="oceania">オセアニア</option>
-      <option value="north-america">北米</option>
-    </select>
-    <div id="selected-region" style="display: none;"></div>
-  </div>
-  
   <!-- 地図表示エリア -->
-  <div class="map-area">
-    <div id="campus-map">
-      <iframe src="https://www.google.com/maps/d/u/1/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F" allowfullscreen="" loading="lazy"></iframe>
+  <main class="map-area">
+    <div id="campus-map" class="map-container active">
+      <iframe src="https://www.google.com/maps/d/u/1/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F" 
+              allowfullscreen="" 
+              loading="lazy"
+              title="キャンパス周辺地図">
+      </iframe>
     </div>
-    <div id="japan-map" style="display:none;"></div>
-    <div id="prefecture-map" style="display: none;"></div>
-    <div id="world-map" style="display: none;"></div>
-  </div>
+    <div id="japan-map" class="map-container">
+      <!-- 日本地図SVGがここに読み込まれます -->
+    </div>
+    <div id="prefecture-map" class="map-container">
+      <!-- 都道府県地図がここに読み込まれます -->
+    </div>
+    <div id="world-map" class="map-container">
+      <iframe src="https://www.google.com/maps/d/embed?mid=1qtamWdIhe4du3uLXQxcD9IrGgNgaVoc&ehbc=2E312F" 
+              allowfullscreen="" 
+              loading="lazy"
+              title="世界地図">
+      </iframe>
+    </div>
+  </main>
 
   <!-- プレースマーク表示エリア -->
-  <div class="placemarks" id="placemarks-list">
-  </div>  
-  
-  <!-- 戻るボタン（都道府県表示時のみ表示） -->
-  <div id="back-button-container" style="display: none;">
-    <button id="back-to-japan" class="back-button">← 日本地図に戻る</button>
+  <section class="placemarks" id="placemarks-list" aria-labelledby="placemarks-title">
+    <h2 id="placemarks-title" class="visually-hidden">観光地・施設一覧</h2>
+    <!-- プレースマークカードがここに動的に生成されます -->
+  </section>
+
+
+
+  <!-- ローディング表示 -->
+  <div id="loading" class="loading" aria-hidden="true">
+    <div class="loading-spinner">
+      <i class="fas fa-map-marked-alt"></i>
+      <p>地図を読み込んでいます...</p>
+    </div>
   </div>
-  
+
   <script src="script.js"></script>
 </body>
 </html>
