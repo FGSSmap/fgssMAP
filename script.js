@@ -2,10 +2,12 @@
 // グローバル定義
 // ==========================
 const campusMapUrl = "https://www.google.com/maps/d/u/1/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F";
+const worldMapUrl = "https://www.google.com/maps/d/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F";
 
 const campusMap = document.getElementById("campus-map");
 const japanMap = document.getElementById("japan-map");
 const prefMap = document.getElementById("prefecture-map");
+const worldMap = document.getElementById("world-map");
 const placemarkContainer = document.getElementById("placemarks-list");
 
 // ==========================
@@ -23,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   campusMap.style.display = "block";
   japanMap.style.display = "none";
   prefMap.style.display = "none";
+  worldMap.style.display = "none";
 
   campusMap.innerHTML = getIframeHTML(campusMapUrl);
   loadAndDisplayPlacemarks("placemark/campus.kml");
@@ -54,11 +57,16 @@ function switchDisplay(target) {
   campusMap.style.display = target === "campus" ? "block" : "none";
   japanMap.style.display = target === "japan" ? "block" : "none";
   prefMap.style.display = target === "pref" ? "block" : "none";
+  worldMap.style.display = target === "world" ? "block" : "none";
 
   // placemark 表示管理
   if (target === "campus") {
     campusMap.innerHTML = getIframeHTML(campusMapUrl);
     loadAndDisplayPlacemarks("placemark/campus.kml");
+  } else if (target === "world") {
+    worldMap.innerHTML = getIframeHTML(worldMapUrl);
+    placemarkContainer.style.display = "none";
+    placemarkContainer.innerHTML = "";
   } else {
     placemarkContainer.style.display = "none";
     placemarkContainer.innerHTML = "";
@@ -107,6 +115,11 @@ document.getElementById("jp-button").addEventListener("click", () => {
   history.pushState({ view: "japan" }, "", "?view=japan");
 });
 
+document.getElementById("world-button").addEventListener("click", () => {
+  switchDisplay("world");
+  history.pushState({ view: "world" }, "", "?view=world");
+});
+
 // ==========================
 // 履歴の戻る・進む対応
 // ==========================
@@ -118,6 +131,8 @@ window.addEventListener("popstate", (event) => {
     document.getElementById("campus-button").click();
   } else if (state.view === "japan") {
     document.getElementById("jp-button").click();
+  } else if (state.view === "world") {
+    document.getElementById("world-button").click();
   } else if (state.view === "pref" && state.code) {
     showPrefectureMap(state.code);
   }
