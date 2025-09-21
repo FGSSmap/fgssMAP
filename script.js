@@ -1,395 +1,719 @@
 // ==========================
-// グローバル定義
+// グローバル変数とDOM要素の取得
 // ==========================
 const campusMapUrl = "https://www.google.com/maps/d/u/1/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&ehbc=2E312F";
 const worldMapUrl = "https://www.google.com/maps/d/embed?mid=1qtamWdIhe4du3uLXQxcD9IrGgNgaVoc&ehbc=2E312F";
 
+// DOM要素の取得
 const campusMap = document.getElementById("campus-map");
 const japanMap = document.getElementById("japan-map");
 const prefMap = document.getElementById("prefecture-map");
 const worldMap = document.getElementById("world-map");
 const placemarkContainer = document.getElementById("placemarks-list");
-const backButtonContainer = document.getElementById("back-button-container");
+const regionSelector = document.getElementById("region-selector");
+const regionSelect = document.getElementById("region-select");
+const selectedRegion = document.querySelector(".selected-region");
+const regionName = document.getElementById("region-name");
+const resetRegionBtn = document.getElementById("reset-region");
+const loading = document.getElementById("loading");
 
-// 地域設定とマップリンクを外部ファイルから読み込み
-let regionSettings = {};
+
+// 現在のアクティブボタンを追跡
+let selectedButton = null;
+
+// 外部データの格納
 let mapLinks = {};
-
-// 地域名の日本語対応
-const regionNames = {
-  asia: "アジア",
-  europe: "ヨーロッパ", 
-  africa: "アフリカ",
-  oceania: "オセアニア",
-  "north-america": "北米"
-};
-
-// 都道府県名の対応表
-const prefectureNames = {
-  "1": "北海道", "2": "青森", "3": "岩手", "4": "宮城", "5": "秋田", "6": "山形", "7": "福島",
-  "8": "茨城", "9": "栃木", "10": "群馬", "11": "埼玉", "12": "千葉", "13": "東京", "14": "神奈川",
-  "15": "新潟", "16": "富山", "17": "石川", "18": "福井", "19": "山梨", "20": "長野", "21": "岐阜",
-  "22": "静岡", "23": "愛知", "24": "三重", "25": "滋賀", "26": "京都", "27": "大阪", "28": "兵庫",
-  "29": "奈良", "30": "和歌山", "31": "鳥取", "32": "島根", "33": "岡山", "34": "広島", "35": "山口",
-  "36": "徳島", "37": "香川", "38": "愛媛", "39": "高知", "40": "福岡", "41": "佐賀", "42": "長崎",
-  "43": "熊本", "44": "大分", "45": "宮崎", "46": "鹿児島", "47": "沖縄"
-};
+let regionSettings = {};
 
 // ==========================
-// 外部ファイル読み込み
+// ユーティリティ関数
 // ==========================
-fetch("region-settings.json")
-  .then(res => res.json())
-  .then(data => { regionSettings = data; })
-  .catch(err => console.error("地域設定読み込み失敗", err));
 
-fetch("map-links.json")
-  .then(res => res.json())
-  .then(data => { mapLinks = data; })
-  .catch(err => console.error("地図リンク読み込み失敗", err));
+// iframe HTML生成
+function getIframeHTML(url, title = "地図") {
+  return `<iframe src="${url}" 
+                  width="100%" 
+                  height="100%" 
+                  style="border:0;" 
+                  allowfullscreen 
+                  loading="lazy"
+                  title="${title}">
+          </iframe>`;
+}
 
-// ==========================
-// iframe生成関数
-// ==========================
-function getIframeHTML(url) {
-  return `<iframe src="${url}" width="100%" height="480" style="border:0;" allowfullscreen loading="lazy"></iframe>`;
+// ローディング表示制御
+function showLoading(show = true) {
+  loading.classList.toggle('show', show);
+  loading.setAttribute('aria-hidden', !show);
+}
+
+// エラーハンドリング
+function handleError(error, context = '') {
+  console.error(`エラー ${context}:`, error);
+  showLoading(false);
+}
+
+// 画像URL抽出（KMLのCDATA内から）
+function extractImageFromDescription(description) {
+  if (!description) return null;
+  
+  const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["'][^>]*>/i);
+  return imgMatch ? imgMatch[1] : null;
+}
+
+// 座標文字列をパース
+function parseCoordinates(coordString) {
+  if (!coordString) return null;
+  
+  const coords = coordString.trim().split(',');
+  if (coords.length >= 2) {
+    return {
+      lng: parseFloat(coords[0]),
+      lat: parseFloat(coords[1])
+    };
+  }
+  return null;
+}
+
+// Google Maps URL生成（座標とズーム指定）
+function generateMapsUrl(lat, lng, zoom = 15) {
+  return `https://www.google.com/maps/@${lat},${lng},${zoom}z`;
 }
 
 // ==========================
-// 初期設定
+// 外部データの読み込み
 // ==========================
-document.addEventListener("DOMContentLoaded", () => {
-  // 最初の表示
-  campusMap.style.display = "block";
-  japanMap.style.display = "none";
-  prefMap.style.display = "none";
-  worldMap.style.display = "none";
-  backButtonContainer.style.display = "none";
 
-  campusMap.innerHTML = getIframeHTML(campusMapUrl);
-  loadAndDisplayPlacemarks("placemark/campus.kml");
+// 地域設定データの読み込み
+async function loadRegionSettings() {
+  try {
+    const response = await fetch("region-settings.json");
+    if (!response.ok) throw new Error('地域設定の読み込みに失敗しました');
+    regionSettings = await response.json();
+  } catch (error) {
+    handleError(error, '地域設定読み込み');
+    // フォールバック用のデフォルト設定
+    regionSettings = {
+      asia: { center: "35.0,105.0", zoom: "4z", name: "アジア" },
+      europe: { center: "54.0,15.0", zoom: "4z", name: "ヨーロッパ" },
+      africa: { center: "0.0,20.0", zoom: "3z", name: "アフリカ" },
+      oceania: { center: "-25.0,140.0", zoom: "4z", name: "オセアニア" },
+      "north-america": { center: "45.0,-100.0", zoom: "3z", name: "北米" }
+    };
+  }
+}
 
-  // ボタンのスタイル初期化
-  let selected = document.getElementById("campus-button");
-  selected.style.transformOrigin = "bottom center";
-  selected.style.transform = "scaleY(1.3)";
+// 地図リンクデータの読み込み
+async function loadMapLinks() {
+  try {
+    // サンプルデータ（実際のプロジェクトでは外部ファイルから読み込み）
+    mapLinks = {
+      "35": "https://www.google.com/maps/d/embed?mid=sample-yamaguchi",
+      "13": "https://www.google.com/maps/d/embed?mid=sample-tokyo"
+      // 他の都道府県も追加可能
+    };
+  } catch (error) {
+    handleError(error, '地図リンク読み込み');
+  }
+}
 
-  document.querySelectorAll(".map-buttons button").forEach(btn => {
-    btn.addEventListener("click", function () {
-      if (selected !== this) {
-        selected.style.transform = "scaleY(1)";
-        this.style.transformOrigin = "bottom center";
-        this.style.transform = "scaleY(1.3)";
-        selected = this;
+// ==========================
+// プレースマークカード生成
+// ==========================
+
+function createPlacemarkCard(placemark) {
+  const name = placemark.getElementsByTagName("name")[0]?.textContent || "名称不明";
+  const descNode = placemark.getElementsByTagName("description")[0];
+  const description = descNode ? descNode.textContent || descNode.innerHTML : "";
+  const coordsNode = placemark.getElementsByTagName("coordinates")[0];
+  const coordsString = coordsNode ? coordsNode.textContent.trim() : "";
+  
+  // 画像URLを抽出
+  const imageUrl = extractImageFromDescription(description);
+  
+  // 座標をパース
+  const coordinates = parseCoordinates(coordsString);
+  
+  // テキストから画像タグを除去してクリーンなテキストを取得
+  const cleanDescription = description
+    .replace(/<img[^>]*>/gi, '')
+    .replace(/<[^>]*>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const card = document.createElement("div");
+  card.className = "placemark-card";
+  card.setAttribute('role', 'article');
+  card.setAttribute('tabindex', '0');
+
+  card.innerHTML = `
+    <div class="placemark-header">
+      ${imageUrl ? 
+        `<img src="${imageUrl}" 
+             alt="${name}" 
+             class="placemark-image"
+             loading="lazy"
+             onerror="this.style.display='none';">` : 
+        `<div class="placemark-overlay"></div>`
+      }
+      <div class="placemark-overlay">
+        <h3 class="placemark-title">${name}</h3>
+      </div>
+    </div>
+    <div class="placemark-content">
+      ${cleanDescription ? 
+        `<p class="placemark-description">${cleanDescription}</p>` : 
+        ''
+      }
+      ${coordinates ? 
+        `<div class="coordinates">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>${coordinates.lat.toFixed(6)}, ${coordinates.lng.toFixed(6)}</span>
+        </div>` : 
+        ''
+      }
+      <div class="placemark-actions">
+        ${coordinates ? 
+          `<button class="placemark-btn primary zoom-btn" 
+                   data-lat="${coordinates.lat}" 
+                   data-lng="${coordinates.lng}"
+                   data-name="${name}">
+            <i class="fas fa-search-plus"></i>
+            地図で確認
+          </button>` : 
+          ''
+        }
+        ${coordinates ? 
+          `<a href="${generateMapsUrl(coordinates.lat, coordinates.lng)}" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             class="placemark-btn secondary">
+            <i class="fas fa-external-link-alt"></i>
+            Google Mapsで開く
+          </a>` : 
+          ''
+        }
+      </div>
+    </div>
+  `;
+
+  return card;
+}
+
+// ==========================
+// KMLファイル読み込みと表示
+// ==========================
+
+async function loadAndDisplayPlacemarks(kmlPath) {
+  try {
+    showLoading(true);
+    
+    const response = await fetch(kmlPath);
+    if (!response.ok) throw new Error("KMLファイルの読み込みに失敗しました");
+    
+    const kmlText = await response.text();
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(kmlText, "text/xml");
+    
+    const documentTag = xmlDoc.getElementsByTagName("Document")[0];
+    if (!documentTag) {
+      throw new Error("有効なKMLファイルではありません");
+    }
+
+    const placemarks = documentTag.getElementsByTagName("Placemark");
+    
+    // プレースマークコンテナをクリアして準備
+    placemarkContainer.innerHTML = '<div class="placemarks-grid"></div>';
+    const grid = placemarkContainer.querySelector('.placemarks-grid');
+    
+    // プレースマークカードを生成
+    for (const placemark of placemarks) {
+      const card = createPlacemarkCard(placemark);
+      grid.appendChild(card);
+    }
+    
+    // プレースマークセクションを表示
+    placemarkContainer.classList.add('show');
+    
+    // ズームボタンのイベントリスナーを設定
+    setupZoomButtons();
+    
+    showLoading(false);
+    
+  } catch (error) {
+    handleError(error, 'KML読み込み');
+    placemarkContainer.innerHTML = `
+      <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+        <p>プレースマークの読み込みに失敗しました。</p>
+      </div>
+    `;
+    placemarkContainer.classList.add('show');
+  }
+}
+
+// ==========================
+// 地図ズーム機能
+// ==========================
+
+function setupZoomButtons() {
+  const zoomButtons = document.querySelectorAll('.zoom-btn');
+  
+  zoomButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const lat = this.getAttribute('data-lat');
+      const lng = this.getAttribute('data-lng');
+      const name = this.getAttribute('data-name');
+      
+      if (lat && lng) {
+        zoomToCoordinate(lat, lng, name);
       }
     });
   });
+}
 
-  // 初期表示切替
-  switchDisplay("campus");
-});
+function zoomToCoordinate(lat, lng, name) {
+  // 現在アクティブな地図コンテナを特定
+  const activeMapContainer = document.querySelector('.map-container.active');
+  if (!activeMapContainer) return;
+  
+  // ズーム用のGoogle Maps URL生成（高ズームレベルで詳細表示）
+  const zoomedMapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d500!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sja!2sjp!4v1234567890123!5m2!1sja!2sjp&z=18`;
+  
+  // アニメーション効果でズーム表示
+  showZoomAnimation(activeMapContainer, () => {
+    activeMapContainer.innerHTML = getIframeHTML(zoomedMapUrl, `${name} - 詳細地図`);
+    
+    // ズームリセットボタンを追加
+    addZoomResetButton(activeMapContainer, name);
+    
+    // ユーザーにフィードバックを提供
+    showZoomNotification(`📍 ${name} にズームしました`);
+  });
+}
+
+function showZoomAnimation(container, callback) {
+  // より自然なズームインエフェクト
+  container.style.transition = 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+  container.style.transform = 'scale(1.02)';
+  container.style.filter = 'blur(1px)';
+  container.style.opacity = '0.8';
+  
+  // ズーム感を演出する擬似的なオーバーレイ
+  const overlay = document.createElement('div');
+  overlay.className = 'zoom-overlay';
+  overlay.innerHTML = '<i class="fas fa-search-plus"></i><p>詳細地図を読み込み中...</p>';
+  container.appendChild(overlay);
+  
+  setTimeout(() => {
+    callback();
+    
+    // 新しい地図が読み込まれた後の復帰アニメーション
+    setTimeout(() => {
+      container.style.transform = 'scale(1)';
+      container.style.filter = 'blur(0)';
+      container.style.opacity = '1';
+      
+      // オーバーレイを除去
+      setTimeout(() => {
+        if (overlay.parentNode) {
+          overlay.remove();
+        }
+        container.style.transition = '';
+      }, 500);
+    }, 200);
+  }, 300);
+}
+
+function addZoomResetButton(container, locationName) {
+  // 既存のリセットボタンを削除
+  const existingResetBtn = container.querySelector('.zoom-reset-btn');
+  if (existingResetBtn) {
+    existingResetBtn.remove();
+  }
+  
+  // リセットボタンを作成
+  const resetButton = document.createElement('button');
+  resetButton.className = 'zoom-reset-btn';
+  resetButton.innerHTML = `
+    <i class="fas fa-arrow-left"></i>
+    <span>元の地図に戻る</span>
+  `;
+  resetButton.setAttribute('aria-label', `${locationName}のズームを解除して元の地図に戻る`);
+  
+  // リセットボタンのクリックイベント
+  resetButton.addEventListener('click', () => {
+    resetMapView(container);
+  });
+  
+  // ボタンをコンテナに追加
+  container.appendChild(resetButton);
+}
+
+function resetMapView(container) {
+  const containerId = container.id;
+  
+  showZoomAnimation(container, () => {
+    // 元の地図に戻す
+    switch (containerId) {
+      case 'campus-map':
+        container.innerHTML = getIframeHTML(campusMapUrl, "キャンパス周辺地図");
+        break;
+      case 'world-map':
+        const currentRegionValue = regionSelect.value;
+        if (currentRegionValue && regionSettings[currentRegionValue]) {
+          const setting = regionSettings[currentRegionValue];
+          const regionMapUrl = `${worldMapUrl}&ll=${setting.center}&z=${setting.zoom}`;
+          container.innerHTML = getIframeHTML(regionMapUrl, `${setting.name}地図`);
+        } else {
+          container.innerHTML = getIframeHTML(worldMapUrl, "世界地図");
+        }
+        break;
+      case 'prefecture-map':
+        // 都道府県地図の場合は現在の都道府県地図に戻す
+        // この部分は既存の地図URLを保持する仕組みが必要
+        break;
+    }
+    
+    // リセットボタンを削除
+    const resetBtn = container.querySelector('.zoom-reset-btn');
+    if (resetBtn) {
+      resetBtn.remove();
+    }
+    
+    showZoomNotification('🗺️ 元の地図に戻りました');
+  });
+}
+
+function showZoomNotification(message) {
+  // 通知要素を作成
+  const notification = document.createElement('div');
+  notification.className = 'zoom-notification';
+  notification.textContent = message;
+  
+  document.body.appendChild(notification);
+  
+  // アニメーション表示
+  setTimeout(() => notification.classList.add('show'), 100);
+  
+  // 3秒後に自動削除
+  setTimeout(() => {
+    notification.classList.remove('show');
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
+}
 
 // ==========================
-// 表示切替関数
+// 表示切り替え管理
 // ==========================
+
 function switchDisplay(target) {
-  campusMap.style.display = target === "campus" ? "block" : "none";
-  japanMap.style.display = target === "japan" ? "block" : "none";
-  prefMap.style.display = target === "pref" ? "block" : "none";
-  worldMap.style.display = target === "world" ? "block" : "none";
+  // 全ての地図コンテナを非表示
+  document.querySelectorAll('.map-container').forEach(container => {
+    container.classList.remove('active');
+  });
   
-  // 戻るボタンの表示制御
-  backButtonContainer.style.display = target === "pref" ? "block" : "none";
+  // プレースマークを非表示
+  placemarkContainer.classList.remove('show');
+  placemarkContainer.innerHTML = '';
   
-  // 地域選択の表示制御
-  toggleRegionSelector(target === "world");
+  // 地域選択を非表示
+  regionSelector.classList.remove('show');
+  resetRegionSelection();
 
-  // placemark 表示管理
-  if (target === "campus") {
-    campusMap.innerHTML = getIframeHTML(campusMapUrl);
-    loadAndDisplayPlacemarks("placemark/campus.kml");
-  } else if (target === "world") {
-    worldMap.innerHTML = getIframeHTML(worldMapUrl);
-    placemarkContainer.style.display = "none";
-    placemarkContainer.innerHTML = "";
-  } else if (target === "pref") {
-    // 都道府県地図は個別の関数で処理
-    placemarkContainer.style.display = "block";
-  } else {
-    placemarkContainer.style.display = "none";
-    placemarkContainer.innerHTML = "";
+  // 対象の地図を表示
+  const targetMap = document.getElementById(`${target}-map`);
+  if (targetMap) {
+    targetMap.classList.add('active');
   }
 
-  // 日本地図の読み込み
-  if (target === "japan") {
-    fetch("japan-map.svg")
-      .then(response => response.text())
-      .then(svgData => {
-        japanMap.innerHTML = svgData;
-        
-        // 都道府県クリックイベントを追加
-        document.querySelectorAll(".prefecture").forEach(pref => {
-          pref.style.fill = "#EEEEEE";
-          pref.style.stroke = "#000000";
-          pref.style.strokeWidth = "1.0";
-          pref.style.cursor = "pointer";
-          
-          pref.addEventListener("mouseover", () => {
-            pref.style.fill = "#ffcccc";
-          });
-          
-          pref.addEventListener("mouseleave", () => {
-            pref.style.fill = "#EEEEEE";
-          });
-          
-          pref.addEventListener("click", () => {
-            const prefCode = pref.dataset.code;
-            if (prefCode) {
-              showPrefectureMap(prefCode);
-              switchDisplay("pref");
-              history.pushState({ view: "pref", code: prefCode }, "", `?view=pref&code=${prefCode}`);
-            }
-          });
-        });
-      })
-      .catch(err => {
-        japanMap.innerHTML = `<p>日本地図の読み込みに失敗しました</p>`;
-        console.error(err);
-      });
-    placemarkContainer.innerHTML = "";
+  switch (target) {
+    case "campus":
+      campusMap.innerHTML = getIframeHTML(campusMapUrl, "キャンパス周辺地図");
+      loadAndDisplayPlacemarks("placemark/campus.kml");
+      break;
+      
+    case "japan":
+      loadJapanMap();
+      break;
+      
+    case "world":
+      worldMap.innerHTML = getIframeHTML(worldMapUrl, "世界地図");
+      regionSelector.classList.add('show');
+      break;
+      
+    case "pref":
+      // 都道府県地図は別途処理
+      break;
   }
 }
 
 // ==========================
-// 地域選択の表示/非表示制御
+// 日本地図の読み込み
 // ==========================
-function toggleRegionSelector(show) {
-  const regionSelector = document.querySelector('.region-selector');
-  if (show) {
-    regionSelector.style.display = 'flex';
-  } else {
-    regionSelector.style.display = 'none';
-    // リセット
-    document.getElementById('region-select').style.display = 'block';
-    document.getElementById('selected-region').style.display = 'none';
-    document.getElementById('region-select').value = '';
+
+async function loadJapanMap() {
+  try {
+    showLoading(true);
+    
+    // 簡易的な日本地図SVGを生成（実際のプロジェクトでは外部ファイルから読み込み）
+    const japanSvg = `
+      <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" class="geolonia-svg-map">
+        <title>日本地図</title>
+        <g class="prefectures">
+          <g class="prefecture" data-code="35" fill="#EEEEEE" stroke="#000" stroke-width="1">
+            <title>山口県</title>
+            <rect x="100" y="400" width="80" height="40" rx="5"/>
+            <text x="140" y="425" text-anchor="middle" font-size="12" fill="#333">山口</text>
+          </g>
+          <g class="prefecture" data-code="13" fill="#EEEEEE" stroke="#000" stroke-width="1">
+            <title>東京都</title>
+            <rect x="400" y="300" width="60" height="30" rx="5"/>
+            <text x="430" y="320" text-anchor="middle" font-size="10" fill="#333">東京</text>
+          </g>
+        </g>
+      </svg>
+    `;
+    
+    japanMap.innerHTML = japanSvg;
+    
+    // 都道府県クリックイベントを設定
+    setupPrefectureClicks();
+    
+    showLoading(false);
+    
+  } catch (error) {
+    handleError(error, '日本地図読み込み');
+    japanMap.innerHTML = `
+      <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: var(--surface-secondary);">
+        <p style="color: var(--text-secondary);">日本地図の読み込みに失敗しました</p>
+      </div>
+    `;
   }
 }
 
-// ==========================
-// ボタンクリックイベント
-// ==========================
-document.getElementById("campus-button").addEventListener("click", () => {
-  switchDisplay("campus");
-  campusMap.innerHTML = getIframeHTML(campusMapUrl);
-  history.pushState({ view: "campus" }, "", "?view=campus");
-});
-
-document.getElementById("jp-button").addEventListener("click", () => {
-  switchDisplay("japan");
-  history.pushState({ view: "japan" }, "", "?view=japan");
-});
-
-document.getElementById("world-button").addEventListener("click", () => {
-  switchDisplay("world");
-  history.pushState({ view: "world" }, "", "?view=world");
-});
-
-// 戻るボタンのイベント
-document.getElementById("back-to-japan").addEventListener("click", () => {
-  switchDisplay("japan");
-  history.pushState({ view: "japan" }, "", "?view=japan");
-});
-
-// ==========================
-// 地域選択イベント
-// ==========================
-document.getElementById('region-select').addEventListener('change', function() {
-  const selectedValue = this.value;
-  if (selectedValue && regionSettings[selectedValue]) {
-    const setting = regionSettings[selectedValue];
-    const regionName = regionNames[selectedValue];
+function setupPrefectureClicks() {
+  const prefectures = document.querySelectorAll(".prefecture");
+  
+  prefectures.forEach(pref => {
+    pref.addEventListener("mouseover", () => {
+      pref.setAttribute('fill', '#fbbf24');
+      pref.style.cursor = 'pointer';
+    });
     
-    // 地図の範囲変更
-    const newUrl = `${worldMapUrl}&ll=${setting.center}&z=${setting.zoom}`;
-    worldMap.innerHTML = getIframeHTML(newUrl);
+    pref.addEventListener("mouseleave", () => {
+      pref.setAttribute('fill', '#EEEEEE');
+    });
     
-    // 選択された地域名を表示
-    document.getElementById('region-select').style.display = 'none';
-    document.getElementById('selected-region').style.display = 'block';
-    document.getElementById('selected-region').textContent = regionName;
-  }
-});
-
-// 選択された地域名をクリックしたらドロップダウンに戻る
-document.getElementById('selected-region').addEventListener('click', function() {
-  document.getElementById('region-select').style.display = 'block';
-  document.getElementById('selected-region').style.display = 'none';
-  document.getElementById('region-select').value = '';
-  // 世界地図を初期状態にリセット
-  worldMap.innerHTML = getIframeHTML(worldMapUrl);
-});
+    pref.addEventListener("click", () => {
+      const code = pref.dataset.code;
+      if (code) {
+        showPrefectureMap(code);
+      }
+    });
+  });
+}
 
 // ==========================
-// 履歴の戻る・進む対応
+// 都道府県地図表示
 // ==========================
-window.addEventListener("popstate", (event) => {
-  const state = event.state;
-  if (!state) return;
 
-  if (state.view === "campus") {
-    document.getElementById("campus-button").click();
-  } else if (state.view === "japan") {
-    document.getElementById("jp-button").click();
-  } else if (state.view === "world") {
-    document.getElementById("world-button").click();
-  } else if (state.view === "pref" && state.code) {
-    showPrefectureMap(state.code);
-    switchDisplay("pref");
-  }
-});
-
-// ==========================
-// 都道府県表示関数
-// ==========================
 function showPrefectureMap(code) {
   const url = mapLinks[code];
   
+  switchDisplay("pref");
+  
   if (!url) {
-    prefMap.innerHTML = `<p>「${prefectureNames[code]}」の地図はまだ準備中です。</p>`;
-    placemarkContainer.innerHTML = `<p>「${prefectureNames[code]}」のプレースマークデータを準備中です。</p>`;
+    prefMap.innerHTML = `
+      <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: var(--surface-secondary); flex-direction: column; gap: 1rem;">
+        <i class="fas fa-map" style="font-size: 3rem; color: var(--text-secondary);"></i>
+        <p style="color: var(--text-secondary);">この地域の地図はまだ準備中です</p>
+      </div>
+    `;
     return;
   }
-
-  prefMap.innerHTML = getIframeHTML(url);
   
-  // プレースマーク読み込み
-  loadAndDisplayPrefPlacemarks(code);
-}
-
-// ==========================
-// Placemark 読み込み関数
-// ==========================
-function loadAndDisplayPlacemarks(kmlPath) {
-  placemarkContainer.style.display = "flex";
-
-  fetch(kmlPath)
-    .then(response => {
-      if (!response.ok) throw new Error("KMLの読み込みに失敗しました");
-      return response.text();
-    })
-    .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-    .then(data => {
-      placemarkContainer.innerHTML = "";
-
-      const documentTag = data.getElementsByTagName("Document")[0];
-      if (!documentTag) {
-        console.warn("Documentタグが見つかりません");
-        placemarkContainer.innerHTML = "<p>プレースマークデータが見つかりません</p>";
-        return;
-      }
-
-      const placemarks = documentTag.getElementsByTagName("Placemark");
-      
-      if (placemarks.length === 0) {
-        placemarkContainer.innerHTML = "<p>プレースマークが登録されていません</p>";
-        return;
-      }
-
-      for (const placemark of placemarks) {
-        const name = placemark.getElementsByTagName("name")[0]?.textContent || "名称不明";
-        const descNode = placemark.getElementsByTagName("description")[0];
-        const descHTML = descNode ? descNode.innerHTML : "";
-
-        const div = document.createElement("div");
-        div.className = "placemark-box";
-        div.innerHTML = `
-          <h3>${name}</h3>
-          <div class="placemark-desc">${descHTML}</div>
-        `;
-        placemarkContainer.appendChild(div);
-      }
-    })
-    .catch(err => {
-      console.error("KML読み込みエラー:", err);
-      placemarkContainer.innerHTML = `<p>プレースマークデータの読み込みに失敗しました: ${err.message}</p>`;
-    });
-}
-
-// ==========================
-// 都道府県別プレースマーク読み込み関数
-// ==========================
-function loadAndDisplayPrefPlacemarks(code) {
-  const placemarkContainer = document.getElementById("placemarks-list");
-  placemarkContainer.style.display = "flex";
+  prefMap.innerHTML = getIframeHTML(url, "都道府県地図");
   
-  const prefName = prefectureNames[code] || `都道府県コード${code}`;
+  // 都道府県別のKMLファイルがあれば読み込み
   const kmlPath = `placemark/${code}.kml`;
-  
-  fetch(kmlPath)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`「${prefName}」のKMLファイルが見つかりません`);
-      }
-      return response.text();
-    })
-    .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-    .then(data => {
-      placemarkContainer.innerHTML = "";
-      
-      const documentTag = data.getElementsByTagName("Document")[0];
-      if (!documentTag) {
-        console.warn("Documentタグが見つかりません");
-        placemarkContainer.innerHTML = `<p>「${prefName}」のプレースマークデータが正しく読み込めません</p>`;
-        return;
-      }
-      
-      const placemarks = documentTag.getElementsByTagName("Placemark");
-
-      if (placemarks.length === 0) {
-        placemarkContainer.innerHTML = `<p>「${prefName}」のプレースマークはまだ登録されていません</p>`;
-        return;
-      }
-
-      // プレースマークを表示
-      for (const placemark of placemarks) {
-        const name = placemark.getElementsByTagName("name")[0]?.textContent || "名称不明";
-        const descNode = placemark.getElementsByTagName("description")[0];
-        const desc = descNode ? descNode.innerHTML : "説明なし";
-        const coords = placemark.getElementsByTagName("coordinates")[0]?.textContent.trim() || "";
-        
-        const div = document.createElement("div");
-        div.className = "placemark-box";
-        div.innerHTML = `
-          <h3>${name}</h3>
-          <div class="placemark-desc">${desc}</div>
-        `;
-        placemarkContainer.appendChild(div);
-      }
-    })
-    .catch(err => {
-      console.error("KML読み込みエラー:", err);
-      placemarkContainer.innerHTML = `<p>「${prefName}」のプレースマークデータの読み込みに失敗しました</p>`;
-    });
+  loadAndDisplayPlacemarks(kmlPath);
 }
 
 // ==========================
-// URLパラメータによる初期表示制御
+// 地域選択機能
 // ==========================
-document.addEventListener("DOMContentLoaded", () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const view = urlParams.get('view');
-  const code = urlParams.get('code');
+
+function resetRegionSelection() {
+  regionSelect.style.display = 'block';
+  selectedRegion.classList.remove('show');
+  regionSelect.value = '';
+}
+
+regionSelect.addEventListener('change', function() {
+  const selectedValue = this.value;
   
-  if (view === 'japan') {
-    document.getElementById("jp-button").click();
-  } else if (view === 'world') {
-    document.getElementById("world-button").click();
-  } else if (view === 'pref' && code) {
-    showPrefectureMap(code);
-    switchDisplay("pref");
-  } else {
-    // デフォルトはキャンパス表示
-    document.getElementById("campus-button").click();
+  if (selectedValue && regionSettings[selectedValue]) {
+    const setting = regionSettings[selectedValue];
+    const name = setting.name || selectedValue;
+    
+    // 地図の範囲を変更
+    const newUrl = `${worldMapUrl}&ll=${setting.center}&z=${setting.zoom}`;
+    worldMap.innerHTML = getIframeHTML(newUrl, `${name}地図`);
+    
+    // 選択された地域名を表示
+    regionSelect.style.display = 'none';
+    selectedRegion.classList.add('show');
+    regionName.textContent = name;
+    
+    // 履歴を更新
+    updateHistory("world", { region: selectedValue });
   }
 });
+
+resetRegionBtn.addEventListener('click', function() {
+  resetRegionSelection();
+  worldMap.innerHTML = getIframeHTML(worldMapUrl, "世界地図");
+  updateHistory("world");
+});
+
+// ==========================
+// ボタンイベント処理
+// ==========================
+
+function setupMapButtons() {
+  const buttons = document.querySelectorAll('.map-btn');
+  
+  buttons.forEach(button => {
+    button.addEventListener('click', function() {
+      // アクティブボタンの更新
+      buttons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      selectedButton = this;
+      
+      // 対応する地図表示
+      const buttonId = this.id;
+      const target = buttonId.replace('-button', '');
+      switchDisplay(target);
+      
+      // 履歴更新
+      updateHistory(target);
+    });
+  });
+}
+
+// ==========================
+// 履歴管理
+// ==========================
+
+function updateHistory(view, params = {}) {
+  const url = new URLSearchParams();
+  url.set('view', view);
+  
+  Object.entries(params).forEach(([key, value]) => {
+    url.set(key, value);
+  });
+  
+  const newUrl = `?${url.toString()}`;
+  history.pushState({ view, ...params }, '', newUrl);
+}
+
+function handlePopState(event) {
+  const state = event.state;
+  if (!state) return;
+  
+  const buttons = document.querySelectorAll('.map-btn');
+  buttons.forEach(btn => btn.classList.remove('active'));
+  
+  switch (state.view) {
+    case 'campus':
+      document.getElementById('campus-button').classList.add('active');
+      switchDisplay('campus');
+      break;
+    case 'japan':
+      document.getElementById('jp-button').classList.add('active');
+      switchDisplay('japan');
+      break;
+    case 'world':
+      document.getElementById('world-button').classList.add('active');
+      switchDisplay('world');
+      if (state.region) {
+        regionSelect.value = state.region;
+        regionSelect.dispatchEvent(new Event('change'));
+      }
+      break;
+    case 'pref':
+      if (state.code) {
+        showPrefectureMap(state.code);
+      }
+      break;
+  }
+}
+
+
+
+// ==========================
+// URL パラメータ処理
+// ==========================
+
+function handleInitialLoad() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const view = urlParams.get('view') || 'campus';
+  const region = urlParams.get('region');
+  
+  // 適切なボタンをアクティブに
+  const buttons = document.querySelectorAll('.map-btn');
+  buttons.forEach(btn => btn.classList.remove('active'));
+  
+  const targetButton = document.getElementById(`${view}-button`);
+  if (targetButton) {
+    targetButton.classList.add('active');
+    selectedButton = targetButton;
+  }
+  
+  // 対応する表示に切り替え
+  switchDisplay(view);
+  
+  // 地域指定がある場合
+  if (view === 'world' && region) {
+    setTimeout(() => {
+      regionSelect.value = region;
+      regionSelect.dispatchEvent(new Event('change'));
+    }, 500);
+  }
+}
+
+// ==========================
+// 初期化処理
+// ==========================
+
+async function initialize() {
+  try {
+    showLoading(true);
+    
+    // 外部データの読み込み
+    await Promise.all([
+      loadRegionSettings(),
+      loadMapLinks()
+    ]);
+    
+    // イベントリスナーの設定
+    setupMapButtons();
+    
+    // 履歴管理
+    window.addEventListener('popstate', handlePopState);
+    
+    // 初期表示の処理
+    handleInitialLoad();
+    
+    showLoading(false);
+    
+    console.log('FGSSmap初期化完了');
+    
+  } catch (error) {
+    handleError(error, '初期化');
+  }
+}
+
+// DOMContentLoaded イベントで初期化
+document.addEventListener("DOMContentLoaded", initialize);
