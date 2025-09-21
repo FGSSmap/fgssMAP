@@ -88,11 +88,6 @@
       </iframe>
     </div>
     <div id="japan-map" class="map-container">
-      <!-- 日本地図に戻るボタン -->
-      <button id="back-to-japan" class="back-button" style="display: none;" aria-label="日本地図に戻る">
-        <i class="fas fa-arrow-left"></i>
-        <span>日本地図に戻る</span>
-      </button>
       <!-- 日本地図SVGがここに読み込まれます -->
     </div>
     <div id="prefecture-map" class="map-container">
@@ -106,6 +101,14 @@
       </iframe>
     </div>
   </main>
+
+  <!-- 戻るボタン（地図とプレースマークの間） -->
+  <div id="back-button-container" class="back-button-container" style="display: none;">
+    <button id="back-to-japan" class="back-button-standalone" aria-label="日本地図に戻る">
+      <i class="fas fa-arrow-left"></i>
+      <span>日本地図に戻る</span>
+    </button>
+  </div>
 
   <!-- プレースマーク表示エリア -->
   <section class="placemarks" id="placemarks-list" aria-labelledby="placemarks-title">
