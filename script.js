@@ -1214,12 +1214,25 @@ document.addEventListener("DOMContentLoaded", () => {
           <p class="modal-footer">山口大学国際総合科学部<br>制定日：2025年1月1日<br>最終更新日：2025年1月1日</p>
         </div>
       `;
+    } else if (type === "contact") {
+      content = `
+        <h2>お問い合わせ</h2>
+        <div class="modal-text">
+          <p>FGSSmapに関するお問い合わせは、下記までお願いいたします。</p>
+          <ul>
+            <li>Email: contact@example.com</li>
+            <li>電話番号: 000-0000-0000</li>
+          </ul>
+          <p class="modal-footer">山口大学国際総合科学部</p>
+        </div>
+      `;
     }
 
     modalBody.innerHTML = content;
     modal.style.display = "flex";
   }
 
+  // モーダルを閉じる
   closeBtn.addEventListener("click", () => {
     modal.style.display = "none";
   });
@@ -1228,6 +1241,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === modal) modal.style.display = "none";
   });
 
+  // クリックイベントを data-type で判定
   document.querySelectorAll(".legal-link[data-type]").forEach(link => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
@@ -1235,6 +1249,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
 
 // ==========================
 // 初期化処理
