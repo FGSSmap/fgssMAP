@@ -922,3 +922,46 @@ body {
   text-align: right;
   color: #555;
 }
+
+/* モーダルの基本デザイン */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  width: 90%;
+  max-width: 700px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+.modal-text h3 {
+  margin-top: 15px;
+}
+
+.modal-footer {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #555;
+}
