@@ -1156,6 +1156,87 @@ function handleInitialLoad() {
 }
 
 // ==========================
+// 新規追加モーダル
+// ==========================
+
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("modal-overlay");
+  const modalBody = document.getElementById("modal-body");
+  const closeBtn = document.getElementById("modal-close");
+
+  function showModal(type) {
+    let content = "";
+
+    if (type === "terms") {
+      content = `
+        <h2>利用規約</h2>
+        <div class="modal-text">
+          <h3>第1条（適用）</h3>
+          <p>本利用規約（以下「本規約」）は、山口大学国際総合科学部が運営するFGSSmapサイト（以下「本サービス」）の利用条件を定めるものです。</p>
+          <h3>第2条（利用目的）</h3>
+          <p>本サービスは、国際総合科学部の10周年記念として、学部の歴史や体験を地図形式で紹介することを目的としています。</p>
+          <h3>第3条（禁止事項）</h3>
+          <ul>
+            <li>本サービスの運営を妨害する行為</li>
+            <li>他の利用者に迷惑をかける行為</li>
+            <li>法令に違反する行為</li>
+            <li>その他、当学部が不適切と判断する行為</li>
+          </ul>
+          <h3>第4条（免責事項）</h3>
+          <p>当学部は、本サービスに関して、その正確性、完全性、有用性等について一切の保証をするものではありません。</p>
+          <h3>第5条（規約の変更）</h3>
+          <p>当学部は、必要と判断した場合には、利用者に通知することなく本規約を変更できるものとします。</p>
+          <p class="modal-footer">山口大学国際総合科学部<br>制定日：2025年1月1日</p>
+        </div>
+      `;
+    } else if (type === "privacy") {
+      content = `
+        <h2>プライバシーポリシー</h2>
+        <div class="modal-text">
+          <h3>個人情報の取り扱いについて</h3>
+          <p>当学部は、FGSSmapサイトにおける個人情報の取り扱いについて以下のとおり定めます。</p>
+          <h3>1. 収集する情報</h3>
+          <ul>
+            <li>アクセスログ情報（IPアドレス、ブラウザ情報等）</li>
+            <li>Cookieによる利用状況の記録</li>
+            <li>お問い合わせフォームから送信された情報</li>
+          </ul>
+          <h3>2. 利用目的</h3>
+          <ul>
+            <li>サイトの改善・最適化</li>
+            <li>お問い合わせへの対応</li>
+            <li>統計データの作成（個人を特定しない形）</li>
+          </ul>
+          <h3>3. 第三者提供</h3>
+          <p>法令に基づく場合を除き、本人の同意なく個人情報を第三者に提供しません。</p>
+          <h3>4. Googleサービス</h3>
+          <p>Google Maps・Google Analyticsを利用しており、それぞれの利用規約・ポリシーが適用されます。</p>
+          <p class="modal-footer">山口大学国際総合科学部<br>制定日：2025年1月1日<br>最終更新日：2025年1月1日</p>
+        </div>
+      `;
+    }
+
+    modalBody.innerHTML = content;
+    modal.style.display = "flex";
+  }
+
+  closeBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.style.display = "none";
+  });
+
+  document.querySelectorAll(".legal-link[data-type]").forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      showModal(link.getAttribute("data-type"));
+    });
+  });
+});
+
+// ==========================
 // 初期化処理
 // ==========================
 
