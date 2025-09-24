@@ -115,39 +115,41 @@
     <h2 id="placemarks-title" class="visually-hidden">観光地・施設一覧</h2>
     <!-- プレースマークカードがここに動的に生成されます -->
   </section>
-
-    <!-- 利用規約・リンクセクション -->
- <section class="legal-section" aria-labelledby="legal-title">
-    <div class="legal-container">
-      <h3 id="legal-title" class="legal-title">利用規約・お問い合わせ</h3>
-      <div class="legal-links">
-        <a href="#" class="legal-link" data-type="terms">
-          <i class="fas fa-file-contract"></i>
-          <span>利用規約</span>
-        </a>
-        <a href="#" class="legal-link" data-type="privacy">
-          <i class="fas fa-shield-alt"></i>
-          <span>プライバシーポリシー</span>
-        </a>
-        <a href="/contact" class="legal-link">
-          <i class="fas fa-envelope"></i>
-          <span>お問い合わせ</span>
-        </a>
-        <a href="https://www.yamaguchi-u.ac.jp/fgss/" target="_blank" rel="noopener noreferrer" class="legal-link">
-          <i class="fas fa-external-link-alt"></i>
-          <span>公式サイト</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- モーダル -->
-  <div id="modal-overlay" class="modal-overlay">
-    <div class="modal-content">
-      <span class="modal-close" id="modal-close">&times;</span>
-      <div id="modal-body"></div>
+  
+<!-- 利用規約・リンクセクション -->
+<section class="legal-section" aria-labelledby="legal-title">
+  <div class="legal-container">
+    <h3 id="legal-title" class="legal-title">利用規約・お問い合わせ</h3>
+    <div class="legal-links">
+      <a href="#" class="legal-link" data-type="terms">
+        <i class="fas fa-file-contract"></i>
+        <span>利用規約</span>
+      </a>
+      <a href="#" class="legal-link" data-type="privacy">
+        <i class="fas fa-shield-alt"></i>
+        <span>プライバシーポリシー</span>
+      </a>
+      <a href="#" class="legal-link" data-type="contact">
+        <i class="fas fa-envelope"></i>
+        <span>お問い合わせ</span>
+      </a>
+      <a href="https://www.yamaguchi-u.ac.jp/fgss/" target="_blank" rel="noopener noreferrer" class="legal-link">
+        <i class="fas fa-external-link-alt"></i>
+        <span>公式サイト</span>
+      </a>
     </div>
   </div>
+</section>
+
+<!-- モーダル -->
+<div id="modal-overlay" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <span class="modal-close" id="modal-close">&times;</span>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+
 
 
   <!-- ローディング表示 -->
