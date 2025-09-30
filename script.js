@@ -1220,8 +1220,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="modal-text">
           <p>FGSSmapに関するお問い合わせは、下記までお願いいたします。</p>
           <ul>
-            <li>Email: contact@example.com</li>
-            <li>電話番号: 000-0000-0000</li>
+            <li>Email: fgss.map.info@gmail.com</li>
+            <li>電話番号: ただいま準備中です</li>
           </ul>
           <p class="modal-footer">山口大学国際総合科学部</p>
         </div>
