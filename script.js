@@ -1088,6 +1088,9 @@ function updateHistory(view, params = {}) {
   
   const newUrl = `?${url.toString()}`;
   history.pushState({ view, ...params }, '', newUrl);
+
+  // ← ここでボタンの表示を更新
+  updateBackButton(view);
 }
 
 function handlePopState(event) {
@@ -1120,7 +1123,19 @@ function handlePopState(event) {
       }
       break;
   }
+
+  // ← 履歴から戻ったときもボタン状態を更新
+  updateBackButton(state.view);
 }
+
+// ==========================
+// 戻るボタン制御
+// ==========================
+function updateBackButton(view) {
+  const backButtonContainer = document.getElementById('back-button-container');
+  backButtonContainer.style.display = (view === 'japan') ? 'block' : 'none';
+}
+
 
 
 
