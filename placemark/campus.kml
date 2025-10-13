@@ -146,26 +146,27 @@
       </Point>
     </Placemark>
     <Placemark>
-      <name>新山口駅</name>
-      <styleUrl>#icon-1899-E65100-nodesc</styleUrl>
-      <Point>
-        <coordinates>
-          131.3963647,34.0936917,0
-        </coordinates>
-      </Point>
-    </Placemark>
-    <Placemark>
       <name>村井P研究室</name>
-      <description><![CDATA[<img src="https://mymaps.usercontent.google.com/hostedimage/m/*/3ADbDBKsOql_4u1-ZDsroBQNo0lsHv6QDSewcYzEW6n7yLGne5zAaGwe-XQ-AOAficsPUYj4Rj9hFtODMGeMj78BK8cF_wHHTDPdC46xbPTQVmJiF_3fmYDW5CbKfUI0bVOfgy1wzH-jRS2JD8JsRHX-UwucM7fnrFYR6CowixB02CCSUq06VGaw_MrMNsB0LX4SJPvSm5PrF2WBGTgjbPGJDVGTZq-hoT-QLkZt6FFDaOnE_cTSgZOOQ4f1rMFo?authuser=1&fife=s16383" height="200" width="auto" /><br><br>AIの研究やってるとこ]]></description>
+      <description><![CDATA[<img src="https://mymaps.usercontent.google.com/hostedimage/m/*/3AKcrxGQqwYmA0AWt9lFS2oCg4VIaL56Wy287unJZKW7Ek8BwgVPJCQDrTCFUaLKp7bGn92DThtpp_vmcYp3Xbi5TlVdAgGQ-50JNw5uIrPrW7KGp_G3Tr27LWyH0cdyqFaYaGI4mHap3ASSDiotd5My80OYBacpLP0imhU2PIy1hD-LlclSzGCaOcHLTA7Kf1X9rbiFmhQ0ckYaZcvDx5yeYSc0SEMoa5Gk9KroRHC48hu9VRAjdERTnNEj57p8?authuser=0&fife=s16383" height="200" width="auto" /><br><br>AIの研究やってるとこ]]></description>
       <styleUrl>#icon-1899-0288D1</styleUrl>
       <ExtendedData>
         <Data name="gx_media_links">
-          <value><![CDATA[https://mymaps.usercontent.google.com/hostedimage/m/*/3ADbDBKsOql_4u1-ZDsroBQNo0lsHv6QDSewcYzEW6n7yLGne5zAaGwe-XQ-AOAficsPUYj4Rj9hFtODMGeMj78BK8cF_wHHTDPdC46xbPTQVmJiF_3fmYDW5CbKfUI0bVOfgy1wzH-jRS2JD8JsRHX-UwucM7fnrFYR6CowixB02CCSUq06VGaw_MrMNsB0LX4SJPvSm5PrF2WBGTgjbPGJDVGTZq-hoT-QLkZt6FFDaOnE_cTSgZOOQ4f1rMFo?authuser=1&fife=s16383]]></value>
+          <value><![CDATA[https://mymaps.usercontent.google.com/hostedimage/m/*/3AKcrxGQqwYmA0AWt9lFS2oCg4VIaL56Wy287unJZKW7Ek8BwgVPJCQDrTCFUaLKp7bGn92DThtpp_vmcYp3Xbi5TlVdAgGQ-50JNw5uIrPrW7KGp_G3Tr27LWyH0cdyqFaYaGI4mHap3ASSDiotd5My80OYBacpLP0imhU2PIy1hD-LlclSzGCaOcHLTA7Kf1X9rbiFmhQ0ckYaZcvDx5yeYSc0SEMoa5Gk9KroRHC48hu9VRAjdERTnNEj57p8?authuser=0&fife=s16383]]></value>
         </Data>
       </ExtendedData>
       <Point>
         <coordinates>
           131.4661863,34.1466512,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>平川河川公園</name>
+      <description>国際総合科学部一年生でBBQを行った。みんなの中を深めることができた！</description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <Point>
+        <coordinates>
+          131.4644891,34.1585902,0
         </coordinates>
       </Point>
     </Placemark>
