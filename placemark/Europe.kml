@@ -53,6 +53,32 @@
         </coordinates>
       </Point>
     </Placemark>
+    <Placemark>
+      <name>Ingleton waterfall</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          -2.4731091,54.153471,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>デンマーク・オーデンセ</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          10.3834039,55.394761,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>リール</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          3.06278,50.63472,0
+        </coordinates>
+      </Point>
+    </Placemark>
   </Document>
 </kml>
-
