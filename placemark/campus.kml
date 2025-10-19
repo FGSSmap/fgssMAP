@@ -147,11 +147,11 @@
     </Placemark>
     <Placemark>
       <name>村井P研究室</name>
-      <description><![CDATA[<img src="https://mymaps.usercontent.google.com/hostedimage/m/*/3AKcrxGQqwYmA0AWt9lFS2oCg4VIaL56Wy287unJZKW7Ek8BwgVPJCQDrTCFUaLKp7bGn92DThtpp_vmcYp3Xbi5TlVdAgGQ-50JNw5uIrPrW7KGp_G3Tr27LWyH0cdyqFaYaGI4mHap3ASSDiotd5My80OYBacpLP0imhU2PIy1hD-LlclSzGCaOcHLTA7Kf1X9rbiFmhQ0ckYaZcvDx5yeYSc0SEMoa5Gk9KroRHC48hu9VRAjdERTnNEj57p8?authuser=0&fife=s16383" height="200" width="auto" /><br><br>AIの研究やってるとこ]]></description>
+      <description><![CDATA[<img src="https://mymaps.usercontent.google.com/hostedimage/m/*/3AKcrxGQusdb4AiNroaEFQ1pS22LnZsOHDzUle_apItD_xHYD97pRL30UOXuHnZCvtLDzMYFw7-ZADgqIN64vUKYwEmYXX7baeJI8DNsxOwDtpfGMDm0Cf5QXjw4Q5NDXhlNfQYjYiupV2AuuwJ-YMSxTgo1gG1ifvkfBiPdGk1vFo82CzZzj0kHpy0aN-tkrXTSvAw30xgz20JHr0NqAQPL7YVtP9a8C7ziwJquPHjPfdJI6QlKom5LujDcS2EY?authuser=0&fife=s16383" height="200" width="auto" /><br><br>AIの研究やってるとこ]]></description>
       <styleUrl>#icon-1899-0288D1</styleUrl>
       <ExtendedData>
         <Data name="gx_media_links">
-          <value><![CDATA[https://mymaps.usercontent.google.com/hostedimage/m/*/3AKcrxGQqwYmA0AWt9lFS2oCg4VIaL56Wy287unJZKW7Ek8BwgVPJCQDrTCFUaLKp7bGn92DThtpp_vmcYp3Xbi5TlVdAgGQ-50JNw5uIrPrW7KGp_G3Tr27LWyH0cdyqFaYaGI4mHap3ASSDiotd5My80OYBacpLP0imhU2PIy1hD-LlclSzGCaOcHLTA7Kf1X9rbiFmhQ0ckYaZcvDx5yeYSc0SEMoa5Gk9KroRHC48hu9VRAjdERTnNEj57p8?authuser=0&fife=s16383]]></value>
+          <value><![CDATA[https://mymaps.usercontent.google.com/hostedimage/m/*/3AKcrxGQusdb4AiNroaEFQ1pS22LnZsOHDzUle_apItD_xHYD97pRL30UOXuHnZCvtLDzMYFw7-ZADgqIN64vUKYwEmYXX7baeJI8DNsxOwDtpfGMDm0Cf5QXjw4Q5NDXhlNfQYjYiupV2AuuwJ-YMSxTgo1gG1ifvkfBiPdGk1vFo82CzZzj0kHpy0aN-tkrXTSvAw30xgz20JHr0NqAQPL7YVtP9a8C7ziwJquPHjPfdJI6QlKom5LujDcS2EY?authuser=0&fife=s16383]]></value>
         </Data>
       </ExtendedData>
       <Point>
@@ -167,6 +167,66 @@
       <Point>
         <coordinates>
           131.4644891,34.1585902,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>教育の丘</name>
+      <description>友達と夜景を見た</description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <Point>
+        <coordinates>
+          131.4701034,34.1488153,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>CAFESSS with È PRONTO（カフェス ウィズ エ プロント）</name>
+      <description>大学で初めてできた友達と一番最初に行ったカフェです♡</description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <Point>
+        <coordinates>
+          131.4559299,34.1647385,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>山水園</name>
+      <description>紅葉の時期に日帰り入浴に行くときれいな景色が楽しめて最高です✨</description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <Point>
+        <coordinates>
+          131.4624796,34.1708961,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>フグサールーム</name>
+      <description><![CDATA[夜遅くまでそこに集まり、テスト勉強や試験対策を行なった。<br>大学での溜まり場で、空きコマはよくそこで時間を潰していた。]]></description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <Point>
+        <coordinates>
+          131.4701034,34.1488153,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>維新みらいふスタジアム</name>
+      <description>レノファ山口の試合観戦</description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <Point>
+        <coordinates>
+          131.4375008,34.1544514,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Onn</name>
+      <description>受験前に宿泊した</description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <Point>
+        <coordinates>
+          131.4554562,34.1641367,0
         </coordinates>
       </Point>
     </Placemark>
