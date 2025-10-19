@@ -1,1 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>北米</name>
+    <Style id="icon-1899-0288D1-normal">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-0288D1-highlight">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-0288D1">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-0288D1-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-0288D1-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Placemark>
+      <name>オクラホマの歩道</name>
+      <description>アルマジロに遭遇</description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <Point>
+        <coordinates>
+          -97.4501029,35.193464,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>ナイアガラ・フォールズ</name>
+      <description><![CDATA[<img src="https://mymaps.usercontent.google.com/hostedimage/m/*/3AKcrxGSsf4Q0X-wrWx5Cm2LDzUllOCj-frJPx5iEupgiJruDIHQ32h3DMl3CDfAGYUVrJh6gO8ugpB4zR1S7TrYQNUIffmLVysJZoR8k3hky2T_v2cjErIp41O2sz07Jb24iPlxcy50ZovKJPgUA9-yN_uu3-sAINLhjEBXEUnUUQw-6BTfp8T9z9aneWN4Hi4QRLfBxWj4XtFKtPiPrLALl--7flGc3KD9I_1SWM2yqg_oYW6mQhxqnYSkjfJ4?authuser=0&fife=s16383" height="200" width="auto" /><br><br>ナイアガラの滝を生で自分の芽で見た<br><br><img src="https://mymaps.usercontent.google.com/hostedimage/m/*/3AKcrxGRbL9XqEoT-nM0SWZPQTpsXrwaej18xqENwt1EEVJ1YtTTp5q1kh3C8Kfdi5oIr3mrX9x5fmV_IWorOsqrGYjdlr1yMsLw8D3GUyBZhEGkyKqa6dXow_ycdHIncWp1tVO5wUnWfiXEL76it8rD__rTFA5pjsUuKSbO_A7UMwWG0Jowli0AiLyU15QrVSr7-uWyaQk7ezs2kVKq61x9EabtVA3smHrJcHDKXc0mV8DfMeuPbpoUwmlka_ZU?authuser=0&fife=s16383" height="200" width="auto" />]]></description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://mymaps.usercontent.google.com/hostedimage/m/*/3AKcrxGSsf4Q0X-wrWx5Cm2LDzUllOCj-frJPx5iEupgiJruDIHQ32h3DMl3CDfAGYUVrJh6gO8ugpB4zR1S7TrYQNUIffmLVysJZoR8k3hky2T_v2cjErIp41O2sz07Jb24iPlxcy50ZovKJPgUA9-yN_uu3-sAINLhjEBXEUnUUQw-6BTfp8T9z9aneWN4Hi4QRLfBxWj4XtFKtPiPrLALl--7flGc3KD9I_1SWM2yqg_oYW6mQhxqnYSkjfJ4?authuser=0&fife=s16383 https://mymaps.usercontent.google.com/hostedimage/m/*/3AKcrxGRbL9XqEoT-nM0SWZPQTpsXrwaej18xqENwt1EEVJ1YtTTp5q1kh3C8Kfdi5oIr3mrX9x5fmV_IWorOsqrGYjdlr1yMsLw8D3GUyBZhEGkyKqa6dXow_ycdHIncWp1tVO5wUnWfiXEL76it8rD__rTFA5pjsUuKSbO_A7UMwWG0Jowli0AiLyU15QrVSr7-uWyaQk7ezs2kVKq61x9EabtVA3smHrJcHDKXc0mV8DfMeuPbpoUwmlka_ZU?authuser=0&fife=s16383]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -79.0741629,43.0828162,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>
 
