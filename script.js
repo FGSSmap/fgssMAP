@@ -1361,19 +1361,19 @@ let kmlCache = {
   regions: {} // 'asia','europe','africa','oceania','north-america'
 };
 
-// --- ファイルパス（ここを実際の配置に合わせて編集してください） ---
+// --- ファイルパス（placemark フォルダ内の .kml を参照） ---
 const KML_PATHS = {
-  campus: 'data/campus.kml',
-  japan: 'data/japan.kml',
-  worldIndex: 'data/world-index.kml' // 任意: 世界全体のインデックスがあれば
+  campus: 'placemark/campus.kml',
+  japan: 'placemark/japan.kml',         // 存在する場合
+  worldIndex: 'placemark/world-index.kml' // 任意: world 全体のインデックスがあれば
 };
 
 const REGION_FILES = {
-  'asia': 'data/asia.kml',
-  'europe': 'data/europe.kml',
-  'africa': 'data/africa.kml',
-  'oceania': 'data/oceania.kml',
-  'north-america': 'data/north-america.kml'
+  'asia': 'placemark/asia.kml',
+  'europe': 'placemark/europe.kml',
+  'africa': 'placemark/africa.kml',
+  'oceania': 'placemark/oceania.kml',
+  'north-america': 'placemark/north-america.kml'
 };
 
 // --- ユーティリティ ---
@@ -1660,7 +1660,6 @@ japanButton?.addEventListener('click', async () => {
 worldButton?.addEventListener('click', async () => {
   setActiveButton(worldButton);
   showMapByKind('world');
-  // world 初回は地域選択を促す
   clearPlacemarksUI();
   placemarkContainer.innerHTML = '<div style="padding:1rem;color:var(--text-secondary);">地域を選択してください。</div>';
 });
