@@ -1312,7 +1312,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <p>当学部は、本サービスに関して、その正確性、完全性、有用性等について一切の保証をするものではありません。</p>
           <h3>第5条（規約の変更）</h3>
           <p>当学部は、必要と判断した場合には、利用者に通知することなく本規約を変更できるものとします。</p>
-          <p class="modal-footer">山口大学国際総合科学部<br>制定日：2025年1月1日</p>
+          <p class="modal-footer">山口大学国際総合科学部<br>制定日：2025年8月20日</p>
         </div>
       `;
     } else if (type === "privacy") {
@@ -1337,7 +1337,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <p>法令に基づく場合を除き、本人の同意なく個人情報を第三者に提供しません。</p>
           <h3>4. Googleサービス</h3>
           <p>Google Maps・Google Analyticsを利用しており、それぞれの利用規約・ポリシーが適用されます。</p>
-          <p class="modal-footer">山口大学国際総合科学部<br>制定日：2025年1月1日<br>最終更新日：2025年1月1日</p>
+          <p class="modal-footer">山口大学国際総合科学部<br>制定日：2025年8月20日<br>最終更新日：2025年10月23日</p>
         </div>
       `;
     } else if (type === "contact") {
