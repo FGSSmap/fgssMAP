@@ -464,6 +464,9 @@ function zoomToCoordinate(lat, lng, name) {
   const activeMapContainer = document.querySelector('.map-container.active');
   if (!activeMapContainer) return;
   
+  // 地図の中央が画面中央に来る位置までスムーズスクロール
+  scrollToMapCenter(activeMapContainer);
+  
   // 現在の iframe を取得
   const currentIframe = activeMapContainer.querySelector('iframe');
   if (!currentIframe) return;
@@ -496,6 +499,26 @@ function zoomToCoordinate(lat, lng, name) {
     
     // ユーザーにフィードバックを提供
     showZoomNotification(`📍 ${name} にズームしました`);
+  });
+}
+
+// 地図の中央が画面中央に来る位置までスムーズスクロール
+function scrollToMapCenter(mapContainer) {
+  if (!mapContainer) return;
+  
+  // 地図コンテナの位置情報を取得
+  const mapRect = mapContainer.getBoundingClientRect();
+  const mapHeight = mapRect.height;
+  const windowHeight = window.innerHeight;
+  
+  // 地図の中央が画面中央に来る位置を計算
+  const mapCenterY = mapRect.top + window.pageYOffset + (mapHeight / 2);
+  const targetScrollY = mapCenterY - (windowHeight / 2);
+  
+  // スムーズスクロール実行
+  window.scrollTo({
+    top: targetScrollY,
+    behavior: 'smooth'
   });
 }
 
